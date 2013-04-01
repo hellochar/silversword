@@ -1,6 +1,6 @@
 function init() {
     // set the scene size
-    var WIDTH = 600, HEIGHT = 500;
+    var WIDTH = 800, HEIGHT = 600;
 
     // set some camera attributes
     var VIEW_ANGLE = 60,
@@ -12,7 +12,7 @@ function init() {
     // - assume we've got jQuery to hand
     var $container = $('#container');
 
-    renderer = new THREE.CanvasRenderer({
+    renderer = new THREE.WebGLRenderer({
     });
     camera = new THREE.PerspectiveCamera(  VIEW_ANGLE,
             ASPECT,
@@ -56,15 +56,19 @@ function init() {
     // and the camera
     scene.add(camera);
 
-    var dirLight = new THREE.DirectionalLight( 0x606060 );
-    dirLight.position.set( 0, .5, .5 ); 
+    var dirLight = new THREE.DirectionalLight( 0x333333 );
+    dirLight.position.set( 0, -.5, -.5 ); 
     scene.add(dirLight);
 
-    var dirLight = new THREE.DirectionalLight( 0x606060 );
-    dirLight.position.set( .8, .2, -.5 ); 
+    var dirLight = new THREE.DirectionalLight( 0x444444 );
+    dirLight.position.set( 0, .5, -.5 ); 
     scene.add(dirLight);
 
-    scene.add(new THREE.AmbientLight( 0x404040 ));
+    var dirLight = new THREE.DirectionalLight( 0x666666 );
+    dirLight.position.set( .1, .2, .9 ); 
+    scene.add(dirLight);
+
+    scene.add(new THREE.AmbientLight( 0x333333 ));
 
     (function() {
 
@@ -114,12 +118,12 @@ function recomputeSphere() {
     }
     //DEFAULT SPHERE
     sphere = new Sphere(
-                21,     //num lon
-                10,      //num lat
+                15,     //num lon
+                7,      //num lat
                 10,     //diameter
-                8,      //extrudeZ
-                .5,     //aperture
-                new THREE.Vector2(1, 5), //skew
+                4,      //extrudeZ
+                .7,     //aperture
+                new THREE.Vector2(1, 2), //skew
                 new THREE.SplineCurve([new THREE.Vector2(0, 1), new THREE.Vector2(.5, 2), new THREE.Vector2(1, 1)]) //profile
             );
 

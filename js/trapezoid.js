@@ -76,19 +76,16 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
     for(var i = 0; i < 4; i += 1) {
         var face = new THREE.Face4(i, i+4, (i+1)%4+4, (i+1)%4);
         //TODO add normals
-        face.normal = this.vertices[face.d].clone().sub(this.vertices[face.a]).cross(
-                      this.vertices[face.b].clone().sub(this.vertices[face.a])).normalize();
+        face.normal = this.vertices[face.b].clone().sub(this.vertices[face.a]).cross(
+                      this.vertices[face.d].clone().sub(this.vertices[face.a])).normalize();
         //face.vertexNormals.push(1,2,3,4);
         this.faces.push( face );
     }
 
-    // console.log(pointsBase, pointsTop);
-    // console.log(this.vertices);
-    // console.log(this.faces);
-
     this.computeCentroids();
     this.computeBoundingBox();
     this.computeBoundingSphere();
+
 }
 
 TrapezoidGeometry.prototype = Object.create( THREE.Geometry.prototype );
