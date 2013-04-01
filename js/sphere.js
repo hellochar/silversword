@@ -1,4 +1,4 @@
-function Sphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew) {
+function Sphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile) {
     THREE.Object3D.call(this);
 
     this.OPENING_DIAMETER = 5;
@@ -8,8 +8,8 @@ function Sphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew) {
     this.diameter = diameter;
     this.extrudeZ = extrudeZ;
     this.aperture = aperture;
-
     this.skew = skew;
+    this.profile = profile;
 
     this.latStart = -Math.acos(this.OPENING_DIAMETER/this.diameter);
     this.latEnd = -this.latStart;
@@ -18,16 +18,52 @@ function Sphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew) {
         for(var latIndex = 0; latIndex < this.NUM_LAT; latIndex+=1) {
             var geometry = new TrapezoidGeometry(this, lonIndex, latIndex);
             var materialFill = new THREE.MeshLambertMaterial({
-                color: 0xFF0000,
+                color: 0xFFFFFF,
                 side: THREE.DoubleSide
             });
             // var materialStroke = new THREE.MeshLambert
-            this.add(new THREE.Mesh(geometry, materialFill));
+            var mesh = new THREE.Mesh(geometry, materialFill);
+            mesh.overdraw = true;
+            this.add(mesh);
         }
     }
 }
-
 Sphere.prototype = Object.create( THREE.Object3D.prototype );
+
+Sphere.prototype.profileScalar = function(latIndex) {
+    var latitude = this.toLatAngle(latIndex);
+    var x = THREE.Math.mapLinear(Math.sin(latitude), Math.sin(this.latStart), Math.sin(this.latEnd), 0, 1);
+    var yFromX = function(xTarget) {
+        var xTolerance = 0.0001; //adjust as you please
+        var myBezier = function(t) {
+            return this.profile.getPointAt(t);
+        }.bind(this);
+
+        //establish bounds
+        var lower = 0;
+        var upper = 1;
+        var percent = (upper + lower) / 2;
+
+        //get initial x
+        var x = myBezier(percent).x;
+
+        //loop until completion
+        while(Math.abs(xTarget - x) > xTolerance) {
+            if(xTarget > x) 
+                lower = percent;
+            else 
+                upper = percent;
+
+            percent = (upper + lower) / 2;
+            x = myBezier(percent).x;
+        }
+        //we're within tolerance of the desired x value.
+        //return the y value.
+        return myBezier(percent).y;
+    }.bind(this);
+    
+    return yFromX(x);
+}
 
 Sphere.prototype.toLonAngle = function(lonIndex) {
     return THREE.Math.mapLinear(lonIndex, 0, this.NUM_LON, 0, Math.PI*2);

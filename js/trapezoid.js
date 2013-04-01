@@ -46,9 +46,9 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
 
 
     //extrude up
-    var extrudeZ = sphere.extrudeZ;
+    var height = sphere.extrudeZ * sphere.profileScalar(latIndex + .5);
     _.each(pointsTop, function (vector) {
-        return vector.add(this.normal.clone().setLength(extrudeZ));
+        return vector.add(this.normal.clone().setLength(height));
     }.bind(this));
 
     //aperture
@@ -87,6 +87,8 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
     // console.log(this.faces);
 
     this.computeCentroids();
+    this.computeBoundingBox();
+    this.computeBoundingSphere();
 }
 
 TrapezoidGeometry.prototype = Object.create( THREE.Geometry.prototype );

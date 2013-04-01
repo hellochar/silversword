@@ -12,9 +12,8 @@ function init() {
     // - assume we've got jQuery to hand
     var $container = $('#container');
 
-    // create a WebGL renderer, camera
-    // and a scene
-    renderer = new THREE.CanvasRenderer();
+    renderer = new THREE.CanvasRenderer({
+    });
     camera = new THREE.PerspectiveCamera(  VIEW_ANGLE,
             ASPECT,
             NEAR,
@@ -37,9 +36,9 @@ function init() {
     controls.panSpeed = 0.8;
 
     controls.noZoom = false;
-    controls.noPan = false;
+    controls.noPan = true;
 
-    controls.staticMoving = true;
+    controls.staticMoving = false;
     controls.dynamicDampingFactor = 0.3;
 
     controls.keys = [ 65, 83, 68 ];
@@ -57,16 +56,15 @@ function init() {
     // and the camera
     scene.add(camera);
 
-    // create a point light
-    var dirLight = new THREE.DirectionalLight( 0x808080 );
-
-    // set its position
-    dirLight.position.set( .5, .5, .5 );
-
-    // add to the scene
+    var dirLight = new THREE.DirectionalLight( 0x606060 );
+    dirLight.position.set( 0, .5, .5 ); 
     scene.add(dirLight);
 
-    scene.add(new THREE.AmbientLight( 0x808080 ));
+    var dirLight = new THREE.DirectionalLight( 0x606060 );
+    dirLight.position.set( .8, .2, -.5 ); 
+    scene.add(dirLight);
+
+    scene.add(new THREE.AmbientLight( 0x404040 ));
 
     (function() {
 
@@ -114,7 +112,18 @@ function recomputeSphere() {
     if(sphere != undefined) {
         scene.remove(sphere);
     }
-    sphere = new Sphere(12, 4, 10, 5, .5, new THREE.Vector2(1, 1));
+    //DEFAULT SPHERE
+    sphere = new Sphere(
+                21,     //num lon
+                10,      //num lat
+                10,     //diameter
+                8,      //extrudeZ
+                .5,     //aperture
+                new THREE.Vector2(1, 5), //skew
+                new THREE.SplineCurve([new THREE.Vector2(0, 1), new THREE.Vector2(.5, 2), new THREE.Vector2(1, 1)]) //profile
+            );
+
+
     scene.add(sphere);
 }
 
