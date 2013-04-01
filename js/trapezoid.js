@@ -52,15 +52,22 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
     }.bind(this));
 
     //aperture
- 
     var centerPoint = this.origin.clone().
                             add(this.xAxis.clone().multiplyScalar(.5)).
                             add(this.yAxis.clone().multiplyScalar(.5));
 
     _.each(pointsTop, function (vector) {
         //lerp towards center by aperture amount
-        return lerp(vector, centerPoint, sphere.aperture);
+        lerp(vector, centerPoint, sphere.aperture);
     });
+
+    //skew
+    _.each(pointsTop, function (vector) {
+        vector.
+            add(this.xAxis.clone().multiplyScalar( - sphere.skew.x)).
+            add(this.yAxis.clone().multiplyScalar(sphere.skew.y));
+    }.bind(this));
+
 
     //set up the Geometry variables
     this.vertices = this.vertices.concat(pointsBase);

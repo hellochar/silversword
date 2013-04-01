@@ -1,4 +1,4 @@
-function Sphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture) {
+function Sphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew) {
     THREE.Object3D.call(this);
 
     this.OPENING_DIAMETER = 5;
@@ -8,6 +8,8 @@ function Sphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture) {
     this.diameter = diameter;
     this.extrudeZ = extrudeZ;
     this.aperture = aperture;
+
+    this.skew = skew;
 
     this.latStart = -Math.acos(this.OPENING_DIAMETER/this.diameter);
     this.latEnd = -this.latStart;

@@ -114,7 +114,7 @@ function recomputeSphere() {
     if(sphere != undefined) {
         scene.remove(sphere);
     }
-    sphere = new Sphere(12, 4, 10, 5, .5);
+    sphere = new Sphere(12, 4, 10, 5, .5, new THREE.Vector2(1, 1));
     scene.add(sphere);
 }
 
