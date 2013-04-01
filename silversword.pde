@@ -62,18 +62,23 @@ class Trapezoid {
 
     }
 
-    void vertex3(Vector vector) {
-        vertex(vector.elements[0], vector.elements[1], vector.elements[2]);
-    }
 
-    void draw() {
+    void drawWithVectors() {
+        function vertex3(vector) {
+            vertex(vector.elements[0], vector.elements[1], vector.elements[2]);
+        }
+        beginShape(QUADS);
         for(int i = 0; i < 4; i++) {
             vertex3(pointsBase[i]);
             vertex3(pointsTop[i]);
             vertex3(pointsTop[(i+1)%4]);
             vertex3(pointsBase[(i+1)%4]);
         }
+        endShape();
+    }
 
+    void draw() {
+        drawWithVectors();
     }
 }
 
@@ -118,11 +123,9 @@ class Sphere {
     }
 
     void draw() {
-        beginShape(QUADS);
         trapezoids.forEach(function (trapezoid) {
             trapezoid.draw();
         });
-        endShape();
     }
 
     float toLonAngle(int lonIndex) {
@@ -141,7 +144,9 @@ Sphere sphere;
 
 float r = 0;
 void setup() {
-    size(600, 600, P3D);
+    window.processing = this;
+    /* size(600, 600, P3D); */
+    size(800, 600, OPENGL);
     sphere = new Sphere(12, 4, 10, 5, .5);
     window.sphere = sphere;
     smooth();
@@ -155,7 +160,6 @@ void draw() {
 
     /* translate(width/2, height/2, 0); */
     camera(width/2, height/2, width/2, 0, 0, 0, 0, 0, -1);
-    window.p = this;
     scale(width / (totalDiameter * 1.5));
     rotateZ(r += 0.01);
 
@@ -168,9 +172,9 @@ void draw() {
     stroke(0, 0, 255);
     line(0, 0, 0, 0, 0, 100);
 
-    /* ambientLight(128); */
-    /* directionalLight(128, 128, 128, 0, 1, 0); */
-    lights();
+    ambientLight(128, 128, 128);
+    directionalLight(255, 128, 128, 1, 1, 0);
+    /* lights(); */
 
     fill(255, 255, 255);
     stroke(255, 255, 255);
