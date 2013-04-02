@@ -26,3 +26,7 @@ body {
 .label {
     min-width: 50px;
 }
+
+#bottom {
+    clear: both;
+}

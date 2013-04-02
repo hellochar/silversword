@@ -42,8 +42,8 @@ function updateUI() {
     var diameter = $('#slider_diameter').slider("value");
     var extrudeZ = $('#slider_extrudeZ').slider("value");
     var aperture = $('#slider_aperture').slider("value");
-
     var skew = $('#canvas_skew')[0].skew || new THREE.Vector2(1, 1);
+    var profile = $('#canvas_profile')[0].profile || new THREE.SplineCurve([new THREE.Vector2(0, 1), new THREE.Vector2(.5, 2), new THREE.Vector2(1, 1)]);
 
     $('#num_lon').text(NUM_LON);
     $('#num_lat').text(NUM_LAT);
@@ -51,12 +51,12 @@ function updateUI() {
     $('#extrudeZ').text(extrudeZ.toFixed(2)+' "');
     $('#aperture').text(aperture);
     $('#skew').text(skew.x.toFixed(2)+', '+skew.y.toFixed(2));
-    recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew);
+    recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile);
 
     window.shouldUpdateUI = false;
 }
 
-function recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew) {
+function recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile) {
     if(sphere != undefined) {
         scene.remove(sphere);
     }
@@ -69,7 +69,7 @@ function recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew) {
             extrudeZ,
             aperture,
             skew,
-            new THREE.SplineCurve([new THREE.Vector2(0, 1), new THREE.Vector2(.5, 2), new THREE.Vector2(1, 1)]) //profile
+            profile
             );
 
 
