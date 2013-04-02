@@ -1,43 +1,70 @@
-$('#slider_lat').slider({
-    min: 3,
-    max: 30,
-    value: 7
-});
+function resetUIElements() {
+    //setting up elements
+    $('#slider_lat').slider({
+        min: 3,
+        max: 30,
+        value: 7
+    });
+    $('#slider_lon').slider({
+        min: 6,
+        max: 30,
+        step: 3,
+        value: 15
+    });
+    $('#slider_diameter').slider({
+        min: 6,
+        max: 30,
+        step: (30 - 6) / $('#slider_diameter').width(),
+        value: 10
+    });
+    $('#slider_extrudeZ').slider({
+        min: 1,
+        max: 10,
+        step: (10 - 1) / $('#slider_extrudeZ').width(),
+        value: 4
+    });
+    $('#slider_aperture').slider({
+        min: 0,
+        max: .9,
+        step: (.9 - 0) / $('#slider_aperture').width(),
+        value: .5
+    });
 
-$('#slider_lon').slider({
-    min: 6,
-    max: 30,
-    step: 3,
-    value: 15
-});
-
-$('.ui').on( "slide", function(evt, ui) {
-    window.shouldUpdateUI = true;
-});
+    $('.ui').on( "slide", function(evt, ui) {
+        window.shouldUpdateUI = true;
+    });
+}
+resetUIElements();
 
 function updateUI() {
     var NUM_LON = $('#slider_lon').slider("value");
     var NUM_LAT = $('#slider_lat').slider("value");
+    var diameter = $('#slider_diameter').slider("value");
+    var extrudeZ = $('#slider_extrudeZ').slider("value");
+    var aperture = $('#slider_aperture').slider("value");
 
     $('#num_lon').text(NUM_LON);
     $('#num_lat').text(NUM_LAT);
-    recomputeSphere(NUM_LON, NUM_LAT);
+    $('#diameter').text(diameter.toFixed(2)+' "');
+    $('#extrudeZ').text(extrudeZ.toFixed(2)+' "');
+    $('#aperture').text(aperture);
+    recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture);
 
     window.shouldUpdateUI = false;
 }
 
-function recomputeSphere(NUM_LON, NUM_LAT) {
+function recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture) {
     if(sphere != undefined) {
         scene.remove(sphere);
     }
 
     //DEFAULT SPHERE
     sphere = new Sphere(
-            NUM_LON,     //num lon
-            NUM_LAT,      //num lat
-            10,     //diameter
-            4,      //extrudeZ
-            .7,     //aperture
+            NUM_LON,
+            NUM_LAT,
+            diameter,
+            extrudeZ,
+            aperture,
             new THREE.Vector2(1, 2), //skew
             new THREE.SplineCurve([new THREE.Vector2(0, 1), new THREE.Vector2(.5, 2), new THREE.Vector2(1, 1)]) //profile
             );
