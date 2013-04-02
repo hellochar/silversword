@@ -1,3 +1,51 @@
+$('#slider_lat').slider({
+    min: 3,
+    max: 30,
+    value: 7
+});
+
+$('#slider_lon').slider({
+    min: 6,
+    max: 30,
+    step: 3,
+    value: 15
+});
+
+$('.ui').on( "slide", function(evt, ui) {
+    window.shouldUpdateUI = true;
+});
+
+function updateUI() {
+    var NUM_LON = $('#slider_lon').slider("value");
+    var NUM_LAT = $('#slider_lat').slider("value");
+
+    $('#num_lon').text(NUM_LON);
+    $('#num_lat').text(NUM_LAT);
+    recomputeSphere(NUM_LON, NUM_LAT);
+
+    window.shouldUpdateUI = false;
+}
+
+function recomputeSphere(NUM_LON, NUM_LAT) {
+    if(sphere != undefined) {
+        scene.remove(sphere);
+    }
+
+    //DEFAULT SPHERE
+    sphere = new Sphere(
+            NUM_LON,     //num lon
+            NUM_LAT,      //num lat
+            10,     //diameter
+            4,      //extrudeZ
+            .7,     //aperture
+            new THREE.Vector2(1, 2), //skew
+            new THREE.SplineCurve([new THREE.Vector2(0, 1), new THREE.Vector2(.5, 2), new THREE.Vector2(1, 1)]) //profile
+            );
+
+
+    scene.add(sphere);
+}
+
 function init() {
     // set the scene size
     var WIDTH = 800, HEIGHT = 600;
@@ -30,7 +78,7 @@ function init() {
     $container.append(renderer.domElement);
 
 
-    controls = new THREE.TrackballControls( camera );
+    controls = new THREE.TrackballControls( camera, renderer.domElement );
     controls.rotateSpeed = 1.0;
     controls.zoomSpeed = 1.2;
     controls.panSpeed = 0.8;
@@ -99,7 +147,7 @@ function init() {
     })();
 
     window.sphere = undefined;
-    recomputeSphere();
+    updateUI();
 };
 
 function render() {
@@ -110,25 +158,9 @@ function render() {
 
     renderer.render(scene, camera);
     stats.end();
-}
-
-function recomputeSphere() {
-    if(sphere != undefined) {
-        scene.remove(sphere);
+    if(window.shouldUpdateUI) {
+        updateUI();
     }
-    //DEFAULT SPHERE
-    sphere = new Sphere(
-                15,     //num lon
-                7,      //num lat
-                10,     //diameter
-                4,      //extrudeZ
-                .7,     //aperture
-                new THREE.Vector2(1, 2), //skew
-                new THREE.SplineCurve([new THREE.Vector2(0, 1), new THREE.Vector2(.5, 2), new THREE.Vector2(1, 1)]) //profile
-            );
-
-
-    scene.add(sphere);
 }
 
 init();

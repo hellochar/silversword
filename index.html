@@ -2,15 +2,34 @@
     <head>
         <script src="http://mrdoob.github.com/three.js/build/three.js"></script>
         <script src="https://raw.github.com/mrdoob/stats.js/master/src/Stats.js"></script>
-        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-        <script src="http://underscorejs.org/underscore.js"></script>
         <script src="http://mrdoob.github.com/three.js/examples/js/controls/TrackballControls.js"></script>
+
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+        <script src="http://underscorejs.org/underscore.js"></script>
+
         <script src="js/trapezoid.js"></script>
         <script src="js/sphere.js"></script>
+
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+        <link rel="stylesheet" href="silversword.css" />
     </head>
 
-    <body style='background-color: black; text-align: center'>
+    <body>
         <div id='container'></div>
+        <div id='input'>
+            <div class='row'>
+                <div class='label'># lat:</div>
+                <div class='slider ui' id='slider_lat'></div>
+                <div id='num_lat'></div>
+            </div>
+            <div class='row'>
+                <div class='label'># lon:</div>
+                <div class='slider ui' id='slider_lon'></div>
+                <div id='num_lon'></div>
+            </div>
+        </div>
+
         <script src="js/silversword.js"></script>
     </body>
 
