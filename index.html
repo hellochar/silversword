@@ -4,6 +4,8 @@
         <script src="https://raw.github.com/mrdoob/stats.js/master/src/Stats.js"></script>
         <script src="http://mrdoob.github.com/three.js/examples/js/controls/TrackballControls.js"></script>
 
+        <script src="http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.js"></script>
+
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
         <script src="http://underscorejs.org/underscore.js"></script>
@@ -49,8 +51,8 @@
 
             <div>
                 <div class='label'>Skew</div>
-                <canvas id='skew-canvas'></canvas>
-
+                <canvas id='canvas_skew' data-processing-sources="skew_control.pde"></canvas>
+                <div id='skew'></div>
             </div>
         </div>
 
