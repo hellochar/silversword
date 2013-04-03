@@ -33,6 +33,10 @@ function resetUIElements() {
     $('.ui').on( "slide", function(evt, ui) {
         window.shouldUpdateUI = true;
     });
+
+    $('#buy_me').click(function (evt) {
+        alert("sends you an email with parameters");
+    });
 }
 resetUIElements();
 
@@ -129,7 +133,7 @@ function init() {
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.left = '0px';
     stats.domElement.style.top = '0px';
-    document.body.appendChild( stats.domElement );
+    $container.append( stats.domElement );
 
     // and the camera
     scene.add(camera);
