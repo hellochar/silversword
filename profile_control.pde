@@ -31,7 +31,7 @@ function updateProfile() {
     var points = [points[0].toVector2(), points[1].toVector2(), points[2].toVector2()];
     var profile = new THREE.SplineCurve(points);
     // $('#canvas_profile')[0].profile = profile;
-    window.the_profile = profile;
+    $('#canvas_profile')[0].profile = profile;
 
     window.shouldUpdateUI = true;
 }
@@ -82,7 +82,7 @@ void draw() {
     }
 
     //draw profile
-    var profile = window.the_profile;
+    var profile = $('#canvas_profile')[0].profile;
 
     stroke(255);
     strokeWeight(2);

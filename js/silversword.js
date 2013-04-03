@@ -43,7 +43,7 @@ function updateUI() {
     var extrudeZ = $('#slider_extrudeZ').slider("value");
     var aperture = $('#slider_aperture').slider("value");
     var skew = $('#canvas_skew')[0].skew || new THREE.Vector2(1, 1);
-    var profile = window.the_profile || new THREE.SplineCurve([new THREE.Vector2(1, 0), new THREE.Vector2(2, .5), new THREE.Vector2(1, 1)]);
+    var profile = $('#canvas_profile')[0].profile || new THREE.SplineCurve([new THREE.Vector2(1, 0), new THREE.Vector2(1, .5), new THREE.Vector2(1, 1)]);
 
     $('#num_lon').text(NUM_LON);
     $('#num_lat').text(NUM_LAT);
@@ -99,7 +99,7 @@ function init() {
     scene = new THREE.Scene();
 
     // the camera starts at 0,0,0 so pull it back
-    camera.position.z = 30;
+    camera.position.set( 10, 10, 20 );
 
     // start the renderer
     renderer.setSize(WIDTH, HEIGHT);
@@ -134,47 +134,51 @@ function init() {
     // and the camera
     scene.add(camera);
 
-    var dirLight = new THREE.DirectionalLight( 0x333333 );
+    var dirLight = new THREE.DirectionalLight( 0x555555 );
     dirLight.position.set( 0, -.5, -.5 ); 
     scene.add(dirLight);
 
-    var dirLight = new THREE.DirectionalLight( 0x444444 );
+    var dirLight = new THREE.DirectionalLight( 0x666666 );
     dirLight.position.set( 0, .5, -.5 ); 
     scene.add(dirLight);
 
-    var dirLight = new THREE.DirectionalLight( 0x666666 );
+    var dirLight = new THREE.DirectionalLight( 0x555555 );
+    dirLight.position.set( -.8, -.2, .1 ); 
+    scene.add(dirLight);
+
+    var dirLight = new THREE.DirectionalLight( 0x888888 );
     dirLight.position.set( .1, .2, .9 ); 
     scene.add(dirLight);
 
-    scene.add(new THREE.AmbientLight( 0x333333 ));
+    scene.add(new THREE.AmbientLight( 0x555555 ));
 
-    (function() {
+    // (function() {
 
-        var len = 100;
+    //     var len = 100;
 
-        var matR = new THREE.LineBasicMaterial({ color: 0xff0000 });
-        var matG = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-        var matB = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    //     var matR = new THREE.LineBasicMaterial({ color: 0xff0000 });
+    //     var matG = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+    //     var matB = new THREE.LineBasicMaterial({ color: 0x0000ff });
 
-        var geometry = new THREE.Geometry();
-        geometry.vertices.push(new THREE.Vector3());
-        geometry.vertices.push(new THREE.Vector3(100, 0, 0));
-        var line = new THREE.Line(geometry, matR);
-        scene.add(line);
+    //     var geometry = new THREE.Geometry();
+    //     geometry.vertices.push(new THREE.Vector3());
+    //     geometry.vertices.push(new THREE.Vector3(100, 0, 0));
+    //     var line = new THREE.Line(geometry, matR);
+    //     scene.add(line);
 
-        var geometry = new THREE.Geometry();
-        geometry.vertices.push(new THREE.Vector3());
-        geometry.vertices.push(new THREE.Vector3(0, 100, 0));
-        var line = new THREE.Line(geometry, matG);
-        scene.add(line);
+    //     var geometry = new THREE.Geometry();
+    //     geometry.vertices.push(new THREE.Vector3());
+    //     geometry.vertices.push(new THREE.Vector3(0, 100, 0));
+    //     var line = new THREE.Line(geometry, matG);
+    //     scene.add(line);
 
-        var geometry = new THREE.Geometry();
-        geometry.vertices.push(new THREE.Vector3());
-        geometry.vertices.push(new THREE.Vector3(0, 0, 100));
-        var line = new THREE.Line(geometry, matB);
-        scene.add(line);
+    //     var geometry = new THREE.Geometry();
+    //     geometry.vertices.push(new THREE.Vector3());
+    //     geometry.vertices.push(new THREE.Vector3(0, 0, 100));
+    //     var line = new THREE.Line(geometry, matB);
+    //     scene.add(line);
 
-    })();
+    // })();
 
     window.sphere = undefined;
     window.shouldUpdateUI = true;
