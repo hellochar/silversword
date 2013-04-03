@@ -94,7 +94,7 @@ function init() {
     // - assume we've got jQuery to hand
     var $container = $('#container');
 
-    renderer = new THREE.WebGLRenderer({
+    renderer = new THREE.CanvasRenderer({
     });
     camera = new THREE.PerspectiveCamera(  VIEW_ANGLE,
             ASPECT,

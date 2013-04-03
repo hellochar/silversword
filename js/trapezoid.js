@@ -48,17 +48,17 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
     //extrude up
     var height = sphere.extrudeZ * sphere.profileScalar(latIndex + .5);
     _.each(pointsTop, function (vector) {
-        return vector.add(this.normal.clone().setLength(height));
+        vector.add(this.normal.clone().setLength(height));
     }.bind(this));
 
     //aperture
-    var centerPoint = this.origin.clone().
+    var apertureCenter = pointsTop[0].clone().
                             add(this.xAxis.clone().multiplyScalar(.5)).
                             add(this.yAxis.clone().multiplyScalar(.5));
 
     _.each(pointsTop, function (vector) {
         //lerp towards center by aperture amount
-        lerp(vector, centerPoint, sphere.aperture);
+        lerp(vector, apertureCenter, sphere.aperture);
     });
 
     //skew
