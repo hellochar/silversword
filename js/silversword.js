@@ -43,7 +43,7 @@ function updateUI() {
     var extrudeZ = $('#slider_extrudeZ').slider("value");
     var aperture = $('#slider_aperture').slider("value");
     var skew = $('#canvas_skew')[0].skew || new THREE.Vector2(1, 1);
-    var profile = $('#canvas_profile')[0].profile || new THREE.SplineCurve([new THREE.Vector2(0, 1), new THREE.Vector2(.5, 2), new THREE.Vector2(1, 1)]);
+    var profile = window.the_profile || new THREE.SplineCurve([new THREE.Vector2(1, 0), new THREE.Vector2(2, .5), new THREE.Vector2(1, 1)]);
 
     $('#num_lon').text(NUM_LON);
     $('#num_lat').text(NUM_LAT);
@@ -177,7 +177,7 @@ function init() {
     })();
 
     window.sphere = undefined;
-    updateUI();
+    window.shouldUpdateUI = true;
 };
 
 function render() {
