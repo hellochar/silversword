@@ -82,7 +82,7 @@ function recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, p
 
 function init() {
     // set the scene size
-    var WIDTH = 800, HEIGHT = 600;
+    var WIDTH = 630, HEIGHT = 440;
 
     // set some camera attributes
     var VIEW_ANGLE = 60,
@@ -130,10 +130,10 @@ function init() {
     stats.setMode(0);
 
     // Align top-left
-    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.position = 'relative';
     stats.domElement.style.left = '0px';
     stats.domElement.style.top = '0px';
-    $container.append( stats.domElement );
+    // $container.append( stats.domElement );
 
     // and the camera
     scene.add(camera);
