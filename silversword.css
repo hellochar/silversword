@@ -39,10 +39,6 @@ body {
     padding: 0px;
 }
 
-#input {
-    width: 370px;
-}
-
 #container {
     margin: auto;
     float: left;
@@ -52,17 +48,28 @@ body {
 .slider {
     vertical-align: text-top;
     width: 230px;
-    height: 10px;
-    margin: 5px 10px;
+    height: 8px;
+    background: #303030;
+    border-color: #303030;
+    border-radius: 16px;
 }
 .row {
-    margin: 15px 0px;
+    /* margin: 15px 0px; */
+    height: 38px;
 }
 .row > div {
     display: inline-block;
 }
 .label {
-    min-width: 50px;
+    width: 130px;
+    font-size: 12px;
+    vertical-align: super;
+}
+
+.slider a.ui-slider-handle {
+    width: 16px;
+    height: 16px;
+    border-radius: 16px;
 }
 
 #bottom {

@@ -49,12 +49,6 @@ function updateUI() {
     var skew = $('#canvas_skew')[0].skew || new THREE.Vector2(1, 1);
     var profile = $('#canvas_profile')[0].profile || new THREE.SplineCurve([new THREE.Vector2(1, 0), new THREE.Vector2(1, .5), new THREE.Vector2(1, 1)]);
 
-    $('#num_lon').text(NUM_LON);
-    $('#num_lat').text(NUM_LAT);
-    $('#diameter').text(diameter.toFixed(2)+' "');
-    $('#extrudeZ').text(extrudeZ.toFixed(2)+' "');
-    $('#aperture').text(aperture);
-    $('#skew').text(skew.x.toFixed(2)+', '+skew.y.toFixed(2));
     recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile);
 
     window.shouldUpdateUI = false;
