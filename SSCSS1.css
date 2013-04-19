@@ -1,0 +1,108 @@
+@charset "utf-8";
+body {
+	background-color: #000000;
+	margin: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#logowrapper {
+	height: 105px;
+	width: 1024px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 10px;
+}
+#logocart {
+	color: #FFFFFF;
+	font-size: 14px;
+	width: 130px;
+	position: absolute;
+	top: 52px;
+	right: 10px;
+}
+
+#navbarbackground {
+	height: 35px;
+	text-align: center;
+	color: #FFFFFF;
+	background-image: url(images/navbarbackground.png);
+	background-repeat: repeat;
+}
+#navcenter {
+	width: 1024px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+#navbarwrapper {
+	height: 35px;
+	width: 996px;
+	margin-right: auto;
+	margin-left: auto;
+}
+#navdiv {
+	background-color: #000000;
+	float: left;
+	height: 35px;
+	width: 2px;
+}
+#navbutton {
+	float: left;
+	height: 35px;
+	width: 196px;
+	line-height: 35px;
+}
+#navbutton a {
+	display: block;
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+#navbutton  a:hover {
+	background-image: url(images/navbuttonrollover_03.png);
+	background-repeat: repeat;
+}
+
+#navbuttonbold {
+	height: 35px;
+	width: 200px;
+	line-height: 35px;
+	float: left;
+	font-weight: bolder;
+}
+#navbuttonbold a {
+	display: block;
+	text-decoration: none;
+	color: #FFFFFF;
+}
+#navbuttonbold a:hover {
+	background-image: url(images/navbuttonrollover_03.png);
+	background-repeat: repeat;
+}
+
+
+
+
+
+
+
+#main {
+	color: #FFFFFF;
+	text-align: center;
+	height: 588px;
+	width: 1024px;
+	margin-right: auto;
+	margin-left: auto;
+}
+#footer {
+	color: #CCCCCC;
+	text-align: center;
+	height: 20px;
+	margin-right: 0px;
+	margin-bottom: 10px;
+	margin-left: 0px;
+	background-image: url(images/footerbackground.png);
+	background-repeat: repeat;
+	font-size: 0.9em;
+	line-height: 20px;
+}
