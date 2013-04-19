@@ -31,6 +31,7 @@ body {
 
 .design_right_side {
     width: 380px;
+    font-size: 12px;
 }
 
 #design_middle > div {
@@ -47,28 +48,35 @@ body {
 }
 .slider {
     vertical-align: text-top;
-    width: 230px;
     height: 8px;
     background: #303030;
     border-color: #303030;
     border-radius: 16px;
 }
-.row {
-    /* margin: 15px 0px; */
+.thin_row {
     height: 38px;
 }
 .row > div {
     display: inline-block;
 }
-.label {
+.right_left_side {
     width: 130px;
-    font-size: 12px;
     vertical-align: super;
+}
+.right_right_side {
+    width: 230px;
 }
 
 .slider a.ui-slider-handle {
     width: 16px;
     height: 16px;
+    border-radius: 16px;
+}
+
+#canvas_skew {
+    border-radius: 16px;
+}
+#canvas_profile {
     border-radius: 16px;
 }
 

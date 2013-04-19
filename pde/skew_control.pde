@@ -2,9 +2,9 @@ float minBound = -2,
       maxBound = 2;
 
 void setup() {
-    size(200, 200);
-    mouseX = 150;
-    mouseY = 50;
+    size(234, 234);
+    mouseX = width/2;
+    mouseY = height/2;
     updateSkew();
 }
 
@@ -13,7 +13,7 @@ void draw() {
         updateSkew();
     }
 
-    background(32);
+    background(48);
     var scalar = width / (maxBound - minBound);
     scale( scalar );
     translate( (maxBound - minBound) / 2, (maxBound - minBound) / 2 );

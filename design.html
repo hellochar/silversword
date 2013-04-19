@@ -64,44 +64,41 @@
     <div class="design" id="design_middle">
         <div class="design_left_side" id='container'></div>
         <div class="design_right_side" id='input'>
-            <div class='row'>
-                <div class='label'># Latitudes</div>
-                <div class='slider ui' id='slider_lat'></div>
+            <div class='row thin_row'>
+                <div class='right_left_side'># Latitudes</div>
+                <div class='slider right_right_side' id='slider_lat'></div>
             </div>
-            <div class='row'>
-                <div class='label'># Longitudes</div>
-                <div class='slider ui' id='slider_lon'></div>
-            </div>
-
-            <div class='row'>
-                <div class='label'>Diameter</div>
-                <div class='slider ui' id='slider_diameter'></div>
+            <div class='row thin_row'>
+                <div class='right_left_side'># Longitudes</div>
+                <div class='slider right_right_side' id='slider_lon'></div>
             </div>
 
-            <div class='row'>
-                <div class='label'>Cone Height</div>
-                <div class='slider ui' id='slider_extrudeZ'></div>
+            <div class='row thin_row'>
+                <div class='right_left_side'>Diameter</div>
+                <div class='slider right_right_side' id='slider_diameter'></div>
             </div>
 
-            <div class='row'>
-                <div class='label'>Aperture</div>
-                <div class='slider ui' id='slider_aperture'></div>
+            <div class='row thin_row'>
+                <div class='right_left_side'>Cone Height</div>
+                <div class='slider right_right_side' id='slider_extrudeZ'></div>
             </div>
 
-            <div class='row'>
+            <div class='row thin_row'>
+                <div class='right_left_side'>Aperture</div>
+                <div class='slider right_right_side' id='slider_aperture'></div>
+            </div>
 
-                <div>
-                    <div class='label'>Skew</div>
-                    <canvas id='canvas_skew' data-processing-sources="pde/skew_control.pde"></canvas>
-                </div>
-
-                <div style='text-align: center'>
-                    <div class='label'>Profile Modifier</div>
-                    <div>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+</div>
+            <div class='row thin_row'>
+                <div class='right_left_side'>
+                    Profile Modifier
                     <canvas id='canvas_profile' data-processing-sources="pde/profile_control.pde"></canvas>
                 </div>
-
+                <div class='right_right_side'>
+                    Skew
+                    <canvas id='canvas_skew' data-processing-sources="pde/skew_control.pde"></canvas>
+                </div>
             </div>
+
         </div>
     </div>
 

@@ -40,7 +40,7 @@ function updateProfile() {
 
 
 void setup() {
-    size(150, 300);
+    size(93, 234);
 
     this.draggedOption = [];
 
@@ -71,7 +71,7 @@ void mouseDragged() {
 }
 
 void draw() {
-    background(0);
+    background(48);
 
     //draw line down center
     stroke(64);
