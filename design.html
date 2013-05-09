@@ -54,70 +54,79 @@
 <div id="main">
 
 
-    <div class="design" id="design_top">
-        <div class="design_left_side">
-            Rendered View of Lamp
+    <div id='design_wrapper'>
+        <div class="design" id="design_top">
+            <div class="design_left_side">
+                Rendered View of Lamp
+            </div>
+            <div class="design_right_side">
+                Customization Parameters
+            </div>
         </div>
-        <div class="design_right_side">
-            Customization Parameters
-        </div>
-    </div>
 
-    <div class="design" id="design_middle">
-        <div class="design_left_side" id='container'></div>
-        <div class="design_right_side" id='input'>
-            <div class='row thin_row'>
-                <div class='right_left_side'># Latitudes</div>
-                <div class='slider right_right_side' id='slider_lat'></div>
+        <div class="design" id="design_middle">
+            <div class="design_left_side">
+                <div id='container'></div>
             </div>
-            <div class='row thin_row'>
-                <div class='right_left_side'># Longitudes</div>
-                <div class='slider right_right_side' id='slider_lon'></div>
-            </div>
-
-            <div class='row thin_row'>
-                <div class='right_left_side'>Diameter</div>
-                <div class='slider right_right_side' id='slider_diameter'></div>
-            </div>
-
-            <div class='row thin_row'>
-                <div class='right_left_side'>Cone Height</div>
-                <div class='slider right_right_side' id='slider_extrudeZ'></div>
-            </div>
-
-            <div class='row thin_row'>
-                <div class='right_left_side'>Aperture</div>
-                <div class='slider right_right_side' id='slider_aperture'></div>
-            </div>
-
-            <div class='row'>
-                <div class='right_left_side'>
-                    <span class='pde_label'>Profile Modifier</span>
-                    <canvas id='canvas_profile' data-processing-sources="pde/profile_control.pde"></canvas>
+            <div class="design_right_side" id='input'>
+                <div class='row thin_row'>
+                    <div class='right_left_side'># Latitudes</div>
+                    <div class='slider right_right_side' id='slider_lat'></div>
                 </div>
-                <div class='right_right_side'>
-                    <span class='pde_label'>Skew</span>
-                    <canvas id='canvas_skew' data-processing-sources="pde/skew_control.pde"></canvas>
+                <div class='row thin_row'>
+                    <div class='right_left_side'># Longitudes</div>
+                    <div class='slider right_right_side' id='slider_lon'></div>
                 </div>
-            </div>
 
+                <div class='row thin_row'>
+                    <div class='right_left_side'>Diameter</div>
+                    <div class='slider right_right_side' id='slider_diameter'></div>
+                </div>
+
+                <div class='row thin_row'>
+                    <div class='right_left_side'>Cone Height</div>
+                    <div class='slider right_right_side' id='slider_extrudeZ'></div>
+                </div>
+
+                <div class='row thin_row'>
+                    <div class='right_left_side'>Aperture</div>
+                    <div class='slider right_right_side' id='slider_aperture'></div>
+                </div>
+
+                <div class='row'>
+                    <div class='right_left_side'>
+                        <span class='pde_label'>Profile Modifier</span>
+                        <canvas id='canvas_profile' data-processing-sources="pde/profile_control.pde"></canvas>
+                    </div>
+                    <div class='right_right_side'>
+                        <span class='pde_label'>Skew</span>
+                        <canvas id='canvas_skew' data-processing-sources="pde/skew_control.pde"></canvas>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
 
-    <div class="design" id="design_bottom">
-        <div class="design_left_side">
-            <div>
-                <h3>12'' x 23''</h3>
-            </div>
+        <div class="design" id="design_bottom">
+            <div class="design_left_side">
+                <div id='dimensions' class='outset outset-black'>
+                    Total Height x Diameter
+                    <br>
+                    12'' x 23''
+                </div>
 
-            <div>
-                <h3>Lamp Cost: $123.12</h3>
-            </div>
+                <button id='buy_me' class='outset outset-pink' type="button">Buy Your Lamp!</button>
 
-            <div>
-                <button id='buy_me' type="button">Buy me!</button>
+                <div id='cost' class='outset outset-black'>
+                    Lamp Cost
+                    <br>
+                    $123.12
+                </div>
+
             </div>
         </div>
+
+
     </div>
 
     <script src="js/silversword.js"></script>
