@@ -30,7 +30,7 @@ function resetUIElements() {
         value: .5
     });
 
-    $('.ui').on( "slide", function(evt, ui) {
+    $('.slider').on( "slide", function(evt, ui) {
         window.shouldUpdateUI = true;
     });
 
