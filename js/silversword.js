@@ -34,8 +34,23 @@ function resetUIElements() {
         window.shouldUpdateUI = true;
     });
 
-    $('#buy_me').click(function (evt) {
-        alert("sends you an email with parameters");
+    $('#buy_me').click(function(evt) {
+        var data = "";
+        data += "4\n";
+        data += "8\n";
+        $.post("/submit_order.php",
+            {
+                data : data
+            },
+            function (data, status, jqXHR) {
+                console.log(arguments);
+                if(status != "success") {
+                    alert("something went wrong: " + data);
+                }
+                else {
+                    alert(data);
+                }
+            });
     });
 }
 resetUIElements();
@@ -180,6 +195,8 @@ function init() {
 
     window.sphere = undefined;
     window.shouldUpdateUI = true;
+
+
 };
 
 function render() {

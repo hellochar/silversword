@@ -61,7 +61,7 @@ body {
 }
 .right_left_side {
     width: 130px;
-    vertical-align: super;
+    /* vertical-align: super; */
 }
 .right_right_side {
     width: 230px;
@@ -71,6 +71,11 @@ body {
     width: 16px;
     height: 16px;
     border-radius: 16px;
+}
+
+.pde_label {
+    display: inline-block;
+    margin-bottom: 10px;
 }
 
 #canvas_skew {
