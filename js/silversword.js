@@ -142,7 +142,7 @@ function init() {
     stats.domElement.style.position = 'relative';
     stats.domElement.style.left = '0px';
     stats.domElement.style.top = '0px';
-    $container.append( stats.domElement );
+    // $container.append( stats.domElement );
 
     // and the camera
     scene.add(camera);
