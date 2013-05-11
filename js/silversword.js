@@ -2,12 +2,12 @@ function resetUIElements() {
     //setting up elements
     $('#slider_lat').slider({
         min: 3,
-        max: 30,
+        max: 8,
         value: 7
     });
     $('#slider_lon').slider({
         min: 6,
-        max: 30,
+        max: 18,
         step: 3,
         value: 15
     });
@@ -25,8 +25,8 @@ function resetUIElements() {
     });
     $('#slider_aperture').slider({
         min: 0,
-        max: .9,
-        step: (.9 - 0) / $('#slider_aperture').width(),
+        max: .8,
+        step: (.8 - 0) / $('#slider_aperture').width(),
         value: .5
     });
 
