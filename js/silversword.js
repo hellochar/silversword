@@ -172,13 +172,13 @@ function init() {
 
     var axis = (function () {
 
-        function makeThickArrowMesh(color) {
-            var material = new THREE.MeshLambertMaterial({color: color});
+        function makeThickArrowMesh(params) {
+            var material = new THREE.MeshPhongMaterial(params);
 
-            var arrowBase = new THREE.CylinderGeometry(.4, .4, 3, 10, 1, true);
+            var arrowBase = new THREE.CylinderGeometry(.3, .3, 3, 20, 1, true);
             arrowBase.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 1.5, 0 ) );
 
-            var arrowTip = new THREE.CylinderGeometry(0, .8, 1.5, 10, 1, false);
+            var arrowTip = new THREE.CylinderGeometry(0, .7, 1.5, 20, 1, false);
             arrowTip.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 3 + 0.75, 0 ) );
 
             THREE.GeometryUtils.merge(arrowBase, arrowTip);
@@ -188,18 +188,20 @@ function init() {
 
         var axis = new THREE.Object3D();
 
-        var topArrow = makeThickArrowMesh(0xff0000);
+        //same dark red color as the bottom of the "Buy Your Lamp" button
+        var topArrow = makeThickArrowMesh({color: 0x9A003C, ambient: 0xFF0063});
         axis.add(topArrow);
 
-        var xArrow = makeThickArrowMesh(0xffffff);
+        var xyParams = {color: 0xbbbbbb, ambient: 0x808080};
+        var xArrow = makeThickArrowMesh(xyParams);
         xArrow.rotation.set( 0, 0, -Math.PI / 2 );
         axis.add(xArrow);
 
-        var zArrow = makeThickArrowMesh(0xffffff);
+        var zArrow = makeThickArrowMesh(xyParams);
         zArrow.rotation.set( Math.PI / 2, 0, 0 );
         axis.add(zArrow);
 
-        var ball = new THREE.Mesh(new THREE.SphereGeometry(.6), new THREE.MeshLambertMaterial({color: 0xffffff}));
+        var ball = new THREE.Mesh(new THREE.SphereGeometry(.6), new THREE.MeshLambertMaterial({color: 0xffffff, emissive: 0x808080}));
         axis.add(ball);
 
         var scale = 0.01;
