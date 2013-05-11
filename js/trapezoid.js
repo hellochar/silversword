@@ -46,7 +46,7 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
 
 
     //extrude up
-    var height = sphere.extrudeZ * sphere.profileScalar(latIndex + .5);
+    var height = sphere.diameter * sphere.extrudeZ * sphere.profileScalar(latIndex + .5); // add 0.5 to average out the location where you're sampling
     _.each(pointsTop, function (vector) {
         vector.add(this.normal.clone().setLength(height));
     }.bind(this));

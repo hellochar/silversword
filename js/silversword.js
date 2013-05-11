@@ -18,10 +18,10 @@ function resetUIElements() {
         value: 10
     });
     $('#slider_extrudeZ').slider({
-        min: 1,
-        max: 10,
-        step: (10 - 1) / $('#slider_extrudeZ').width(),
-        value: 4
+        min: 0,
+        max: 1,
+        step: (1 - 0) / $('#slider_extrudeZ').width(),
+        value: 0.3
     });
     $('#slider_aperture').slider({
         min: 0,
