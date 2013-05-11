@@ -66,6 +66,31 @@ function updateUI() {
 
     recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile);
 
+
+    //taken from https://github.com/mrdoob/three.js/issues/581#issuecomment-14000527
+    function getCompoundBoundingBox(object3D) {
+        var box = null;
+        object3D.traverse(function (obj3D) {
+            var geometry = obj3D.geometry;
+            if (geometry === undefined) return;
+            geometry.computeBoundingBox();
+            if (box === null) {
+                box = geometry.boundingBox;
+            } else {
+                box.union(geometry.boundingBox);
+            }
+        });
+        return box;
+    }
+
+    var totalBB = getCompoundBoundingBox(sphere);
+    var totalHeight = totalBB.max.y - totalBB.min.y,
+        totalDiameter = totalBB.max.x - totalBB.min.x; //the z coordinate would work here too
+    $('#dimensions_indicator').text( totalHeight.toFixed(2) +'" x ' + totalDiameter.toFixed(2) +'"');
+
+    var cost = totalBB.max.clone().sub(totalBB.min).length() * NUM_LON * NUM_LAT / (6 * 8);
+    $('#cost_indicator').text('$' + cost.toFixed(2));
+
     window.shouldUpdateUI = false;
 }
 
