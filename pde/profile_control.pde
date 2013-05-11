@@ -13,6 +13,10 @@ function Point(x, y, frozenY) {
               yMapped = map(this.y, 0, height, 1, 0);
         return new THREE.Vector2(xMapped, yMapped);
     }
+
+    this.hitsMe = function(x, y) {
+        return dist(this.x, this.y, mouseX, mouseY) < 25;
+    }
 }
 
 float log2(float x) {
@@ -38,6 +42,36 @@ function updateProfile() {
 
 
 
+/* =============    OFF CANVAS DRAGGING       =========== */
+function updateMousePosition(e) {
+    var position = $('#canvas_skew').offset();
+    pmouseX = mouseX;
+    pmouseY = mouseY;
+    mouseX = e.pageX - position.left;
+    mouseY = e.pageY - position.top;
+}
+
+function offCanvasMoveListener(e) {
+    if(e.which && mousePressed) {
+        updateMousePosition(e);
+        mouseDragged();
+    }
+}
+
+function offCanvasUpListener(e) {
+    if(mousePressed) {
+        updateMousePosition(e);
+        mousePressed = false;
+        mouseReleased();
+    }
+}
+
+function constrainMousePosition() {
+    var constrainRadius = 8;
+    mouseX = constrain(mouseX, constrainRadius, width - constrainRadius);
+    mouseY = constrain(mouseY, constrainRadius, height - constrainRadius);
+}
+/* ======================================================== */
 
 void setup() {
     size(93, 234);
@@ -55,16 +89,21 @@ void setup() {
 void mousePressed() {
     //get closest point
     this.draggedOption = _.filter(this.points, function (pt) {
-        return dist(pt.x, pt.y, mouseX, mouseY) < 25;
+        return pt.hitsMe(mouseX, mouseY);
     }).slice(0, 1);
+
+    $('*:not(canvas)').on('mousemove', offCanvasMoveListener).on('mouseup', offCanvasUpListener);
 }
 
 void mouseReleased() {
     this.draggedOption = [];
+
+    $('*:not(canvas)').off('mousemove', offCanvasMoveListener).off('mouseup', offCanvasUpListener);
 }
 
 void mouseDragged() {
     _.each(this.draggedOption, function (pt) {
+        constrainMousePosition();
         pt.trySetPosition(mouseX, mouseY);
         updateProfile.call(this);
     }.bind(this));
@@ -100,12 +139,12 @@ void draw() {
     _.each(this.points, function (pt) {
         fill(255);
         noStroke();
-        ellipse(pt.x, pt.y, 25, 25);
+        ellipse(pt.x, pt.y, 16, 16);
     });
 
     _.each(this.draggedOption, function (pt) {
         noFill();
         stroke(255);
-        ellipse(pt.x, pt.y, 30, 30);
+        ellipse(pt.x, pt.y, 24, 24);
     });
 }

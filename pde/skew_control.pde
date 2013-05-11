@@ -1,12 +1,54 @@
 float minBound = -2,
       maxBound = 2;
 
+/* =============    OFF CANVAS DRAGGING       =========== */
+function updateMousePosition(e) {
+    var position = $('#canvas_skew').offset();
+    pmouseX = mouseX;
+    pmouseY = mouseY;
+    mouseX = e.pageX - position.left;
+    mouseY = e.pageY - position.top;
+}
+
+function offCanvasMoveListener(e) {
+    if(e.which && mousePressed) {
+        updateMousePosition(e);
+        // updateSkew();
+    }
+}
+
+function offCanvasUpListener(e) {
+    if(mousePressed) {
+        updateMousePosition(e);
+        // updateSkew();
+        mousePressed = false;
+        mouseReleased();
+    }
+}
+
+function constrainMousePosition() {
+    var constrainRadius = 8;
+    mouseX = constrain(mouseX, constrainRadius, width - constrainRadius);
+    mouseY = constrain(mouseY, constrainRadius, height - constrainRadius);
+}
+
+void mousePressed() {
+    $('*:not(canvas)').on('mousemove', offCanvasMoveListener).on('mouseup', offCanvasUpListener);
+}
+
+void mouseReleased() {
+    $('*:not(canvas)').off('mousemove', offCanvasMoveListener).off('mouseup', offCanvasUpListener);
+}
+
+/* ======================================================== */
+
 void setup() {
     size(234, 234);
     mouseX = width/2;
     mouseY = height/2;
     updateSkew();
 }
+
 
 void draw() {
     if(mousePressed) {
@@ -39,6 +81,7 @@ void draw() {
 }
 
 void updateSkew() {
+    constrainMousePosition();
     float skewX = map(mouseX, 0, width,  minBound, maxBound);
     float skewY = map(mouseY, 0, height, maxBound, minBound);
 
