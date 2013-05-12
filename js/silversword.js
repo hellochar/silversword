@@ -35,12 +35,24 @@ function resetUIElements() {
     });
 
     $('#buy_me').click(function(evt) {
-        var data = "";
-        data += "4\n";
-        data += "8\n";
+        /*
+         * # lat
+         * # lon
+         * coordinate points
+         */
+        var txtLines = [sphere.NUM_LAT, sphere.NUM_LON];
+        sphere.unrollAll().forEach(function (unrolledTrapezoid) {
+            unrolledTrapezoid.forEach(function (pt) {
+                txtLines.push(pt.x);
+                txtLines.push(pt.y);
+            });
+        });
+        
+        var text = txtLines.join("\r\n");
+        console.log(text);
         $.post("/submit_order.php",
             {
-                data : data
+                data : text
             },
             function (data, status, jqXHR) {
                 console.log(arguments);

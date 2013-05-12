@@ -14,6 +14,9 @@ function Sphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile) {
     this.latStart = -Math.acos(this.OPENING_DIAMETER/this.diameter);
     this.latEnd = -this.latStart;
 
+    //trapezoids[x] holds the "right" Trapezoid for latitude index x
+    this.trapezoids = [];
+
     for(var lonIndex = 0; lonIndex < this.NUM_LON; lonIndex+=1) {
         for(var latIndex = 0; latIndex < this.NUM_LAT; latIndex+=1) {
             var geometry = new TrapezoidGeometry(this, lonIndex, latIndex);
@@ -25,11 +28,25 @@ function Sphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile) {
             var mesh = new THREE.Mesh(geometry, materialFill);
             // mesh.overdraw = true;
             this.add(mesh);
+
+            if( this.trapezoids[latIndex] === undefined ) {
+                this.trapezoids[latIndex] = geometry;
+            }
         }
     }
 
 }
 Sphere.prototype = Object.create( THREE.Object3D.prototype );
+
+/*
+ *
+ *  Returns an array of 10 element arrays of Vector2's
+ */
+Sphere.prototype.unrollAll = function() {
+    return this.trapezoids.map(function (trapezoid) {
+        return trapezoid.unroll();
+    });
+}
 
 Sphere.prototype.profileScalar = function(latIndex) {
     var latitude = this.toLatAngle(latIndex);

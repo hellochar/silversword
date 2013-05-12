@@ -86,6 +86,10 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
 
 TrapezoidGeometry.prototype = Object.create( THREE.Geometry.prototype );
 
+/*
+ *  Returns a 10 element Array of Vector2D's.
+ *
+ */
 TrapezoidGeometry.prototype.unroll = function() {
     // for each face F:
     //      create a 2D coordinate system S_F
