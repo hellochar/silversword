@@ -31,7 +31,7 @@ function send_email_order($order_number, $data) {
 Attached is info for order #$order_number. Other info can go here in the body.
 ";
 
-    $data = $order_number . "\n" . $data;
+    $data = $order_number . "\r\n" . $data;
 	file_put_contents("data.txt", $data);
 
 	$mail->AddAttachment("data.txt");
