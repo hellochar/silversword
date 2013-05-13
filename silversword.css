@@ -19,16 +19,23 @@ body {
     margin: 0px auto;
 }
 
+#design_wrapper *:focus {
+    outline: none;
+}
+
 .design {
     width: 1002px;
+    clear: both;
 }
 
 .design_left_side {
     width: 630px;
+    float: left;
 }
 
 .design_right_side {
     width: 368px;
+    float: left;
 }
 
 /* ======== TOP BAR ========= */
@@ -102,7 +109,6 @@ body {
 
 /* ======== BOTTOM BAR ========= */
 #design_bottom {
-    clear: both;
     height: 92px;
 }
 #design_bottom > .design_left_side {
