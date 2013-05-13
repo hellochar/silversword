@@ -43,8 +43,8 @@ function resetUIElements() {
         var txtLines = [sphere.NUM_LAT, sphere.NUM_LON];
         sphere.unrollAll().forEach(function (unrolledTrapezoid) {
             unrolledTrapezoid.forEach(function (pt) {
-                txtLines.push(pt.x);
-                txtLines.push(pt.y);
+                txtLines.push(pt.x.toFixed(5));
+                txtLines.push(pt.y.toFixed(5));
             });
         });
         
