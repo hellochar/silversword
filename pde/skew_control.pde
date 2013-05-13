@@ -13,14 +13,14 @@ function updateMousePosition(e) {
 function offCanvasMoveListener(e) {
     if(e.which && mousePressed) {
         updateMousePosition(e);
-        // updateSkew();
+        updateSkew();
     }
 }
 
 function offCanvasUpListener(e) {
     if(mousePressed) {
         updateMousePosition(e);
-        // updateSkew();
+        updateSkew();
         mousePressed = false;
         mouseReleased();
     }

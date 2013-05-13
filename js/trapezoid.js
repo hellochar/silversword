@@ -22,6 +22,13 @@ function to3D(v2) {
     return new THREE.Vector3(v2.x, v2.y, 0);
 }
 
+// Given Vector2's A and B, return the amount required to rotate around the +Z axis to make A parallel to B
+// no unit vectors needed
+function angleFrom(a, b) {
+    //taken from http://d-rob.org/blog/2011/06/angle-vector-to-another/
+    return Math.atan2( a.x * b.y - a.y * b.x, a.x * b.x + a.y * b.y );
+}
+
 
 function TrapezoidGeometry(sphere, lonIndex, latIndex) {
     THREE.Geometry.call(this);
@@ -124,20 +131,16 @@ TrapezoidGeometry.prototype.faceTo2D = function(face) { //should be a Face4
 
 //return face2D transformed to line up the edge with the end of reference
 TrapezoidGeometry.prototype.faceToTrapezoid = function(face2D, reference) {
-    var oldDC = to3D(reference[2].clone().sub(reference[3]));
+    var oldDC = reference[2].clone().sub(reference[3]);
+    var newAB = face2D[1].clone().sub(face2D[0]);
+
+
     var origin = to3D(reference[3]);
-    var newAB = to3D(face2D[1].clone().sub(face2D[0]));
-
-
-    var rotAngle = Math.asin( newAB.clone().normalize().cross(oldDC.clone().normalize()).z );
-
-
-    // var transform = new THREE.Matrix4().makeFromPositionEulerScale( origin, new THREE.Vector3(0, 0, rotAngle), "XYZ", new THREE.Vector3(1,1,1) );
+    var rotationMatrix = new THREE.Matrix4().makeRotationZ( angleFrom(newAB, oldDC) );
 
     return face2D.map(function (pt) {
         var txPt3 = to3D(pt);
-        // txPt3.applyMatrix4(transform);
-        txPt3.applyMatrix4( new THREE.Matrix4().makeRotationZ( rotAngle ) );
+        txPt3.applyMatrix4( rotationMatrix );
         txPt3.add( origin );
 
         return new THREE.Vector2(txPt3.x, txPt3.y);
@@ -200,16 +203,30 @@ TrapezoidGeometry.prototype.unroll = function() {
            ];
 
 
-    //get a fan-like version by flipping the y axis and translating everything up
-    //will also have to re-order the points
-    
-
     var fanlikeUnrolled = (function () {
-        var bound = new THREE.Box2().setFromPoints(fullUnrolled);
+        // Flip it in the y-coordinate
+        // Rotate such that vector 2->10 is parallel to +x
+        // Move point 2 to have y=0, point 1 to have x=0
+        // Keep the indexing scheme
 
-        //TODO implement rotating/moving
+        var flipped = fullUnrolled.map(function (pt) {
+            return new THREE.Vector2( pt.x, -pt.y );
+        });
 
-        return fullUnrolled;
+        var rotAngle = angleFrom(flipped[9].clone().sub(flipped[1]), new THREE.Vector2(1, 0));
+        var rotationMatrix = new THREE.Matrix4().makeRotationZ( rotAngle );
+        var rotated = flipped.map(function (pt) {
+            var pt3 = to3D(pt).applyMatrix4(rotationMatrix);
+
+            return new THREE.Vector2(pt3.x, pt3.y);
+        });
+
+        var translation = new THREE.Vector2( -rotated[0].x, -rotated[1].y );
+        var translated = rotated.map(function (pt) {
+            return new THREE.Vector2(pt.x + translation.x, pt.y + translation.y);
+        });
+
+        return translated;
     })();
 
     return fanlikeUnrolled;
