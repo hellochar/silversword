@@ -4,6 +4,8 @@ function Point(x, y, frozenY) {
     this.y = y;
     this.frozenY = frozenY;
 
+    this.radius = 40;
+
     this.trySetPosition = function(x, y) {
         if(!this.frozenY) this.y = y;
         this.x = x;
@@ -15,7 +17,7 @@ function Point(x, y, frozenY) {
     }
 
     this.hitsMe = function(x, y) {
-        return dist(this.x, this.y, mouseX, mouseY) < 25;
+        return dist(this.x, this.y, mouseX, mouseY) < this.radius;
     }
 }
 
@@ -31,10 +33,8 @@ function fromVector2(v2) {
 }
 
 function updateProfile() {
-    var points = this.points;
-    var points = [points[0].toVector2(), points[1].toVector2(), points[2].toVector2()];
-    var profile = new THREE.SplineCurve(points);
-    // $('#canvas_profile')[0].profile = profile;
+    var pointsV2 = [points[0].toVector2(), points[1].toVector2(), points[2].toVector2()];
+    var profile = new THREE.SplineCurve(pointsV2);
     $('#canvas_profile')[0].profile = profile;
 
     window.shouldUpdateUI = true;
@@ -44,7 +44,7 @@ function updateProfile() {
 
 /* =============    OFF CANVAS DRAGGING       =========== */
 function updateMousePosition(e) {
-    var position = $('#canvas_skew').offset();
+    var position = $('#canvas_profile').offset();
     pmouseX = mouseX;
     pmouseY = mouseY;
     mouseX = e.pageX - position.left;
@@ -52,18 +52,14 @@ function updateMousePosition(e) {
 }
 
 function offCanvasMoveListener(e) {
-    if(e.which && mousePressed) {
-        updateMousePosition(e);
-        mouseDragged();
-    }
+    updateMousePosition(e);
+    mouseDragged();
 }
 
 function offCanvasUpListener(e) {
-    if(mousePressed) {
-        updateMousePosition(e);
-        mousePressed = false;
-        mouseReleased();
-    }
+    updateMousePosition(e);
+    mousePressed = false;
+    mouseReleased();
 }
 
 function constrainMousePosition() {
@@ -73,40 +69,40 @@ function constrainMousePosition() {
 }
 /* ======================================================== */
 
+var draggedOption = [];
+var points = [];
+
 void setup() {
     size(93, 234);
 
-    this.draggedOption = [];
-
-    this.points = [];
-    this.points.push(new Point(width/2, height, true));
-    this.points.push(new Point(width/2, height/2, false));
-    this.points.push(new Point(width/2, 0, true));
-    updateProfile.call(this);
+    points.push(new Point(width/2, height, true));
+    points.push(new Point(width/2, height/2, false));
+    points.push(new Point(width/2, 0, true));
+    updateProfile();
 }
 
 
 void mousePressed() {
     //get closest point
-    this.draggedOption = _.filter(this.points, function (pt) {
+    draggedOption = _.filter(points, function (pt) {
         return pt.hitsMe(mouseX, mouseY);
     }).slice(0, 1);
 
-    $('*:not(canvas)').on('mousemove', offCanvasMoveListener).on('mouseup', offCanvasUpListener);
+    $('body').on('mousemove', offCanvasMoveListener).on('mouseup', offCanvasUpListener);
 }
 
 void mouseReleased() {
-    this.draggedOption = [];
+    draggedOption = [];
 
-    $('*:not(canvas)').off('mousemove', offCanvasMoveListener).off('mouseup', offCanvasUpListener);
+    $('body').off('mousemove', offCanvasMoveListener).off('mouseup', offCanvasUpListener);
 }
 
 void mouseDragged() {
-    _.each(this.draggedOption, function (pt) {
+    _.each(draggedOption, function (pt) {
         constrainMousePosition();
         pt.trySetPosition(mouseX, mouseY);
-        updateProfile.call(this);
-    }.bind(this));
+        updateProfile();
+    });
 }
 
 void draw() {
@@ -130,21 +126,20 @@ void draw() {
     beginShape();
     for(float t = 0; t <= 1; t += .02) {
         var scrnPoint = fromVector2(profile.getPointAt(t));
-        // console.log(scrnPoint);
         vertex(scrnPoint.x, scrnPoint.y);
     }
     endShape();
 
     //draw points
-    _.each(this.points, function (pt) {
+    _.each(points, function (pt) {
         fill(255);
         noStroke();
         ellipse(pt.x, pt.y, 16, 16);
     });
 
-    _.each(this.draggedOption, function (pt) {
+    _.each(draggedOption, function (pt) {
         noFill();
         stroke(255);
-        ellipse(pt.x, pt.y, 24, 24);
+        ellipse(pt.x, pt.y, pt.radius, pt.radius);
     });
 }
