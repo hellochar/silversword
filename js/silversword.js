@@ -32,7 +32,7 @@
             min: 0,
             max: .8,
             step: (.8 - 0) / $('#slider_aperture').width(),
-            value: .5
+            value: .4
         });
 
         $('.slider').on( "slide", function(evt, ui) {
@@ -100,7 +100,7 @@
         var NUM_LAT = $('#slider_lat').slider("value");
         var diameter = $('#slider_diameter').slider("value");
         var extrudeZ = $('#slider_extrudeZ').slider("value");
-        var aperture = $('#slider_aperture').slider("value");
+        var aperture = 0.8 - $('#slider_aperture').slider("value");
         var skew = $('#canvas_skew')[0].skew || new THREE.Vector2(1, 1);
         var profile = $('#canvas_profile')[0].profile || new THREE.SplineCurve([new THREE.Vector2(1, 0), new THREE.Vector2(1, .5), new THREE.Vector2(1, 1)]);
 
