@@ -10,6 +10,26 @@
     var PREASSEMBLED_COST = 50; //dollrs
 
     function resetUIElements() {
+        for(var paramName in window.DEFAULT_SILVERSWORD_PARAMETERS) {
+            var selector = {
+                latitude: 'slider_lat',
+                longitude: 'slider_lon',
+                diameter: 'slider_diameter',
+                coneHeight: 'slider_extrudeZ',
+                aperture: 'slider_aperture'
+            }[paramName];
+
+            var input = window.DEFAULT_SILVERSWORD_PARAMETERS[paramName];
+
+            var parameters = {
+                min: selector.min,
+                max: selector.max,
+                value: selector.default,
+                step: selector.step,
+
+            }
+
+        }
         //setting up elements
         $('#slider_lat').slider({
             min: 3,
@@ -335,4 +355,5 @@
 
     init();
     render();
+
 })();
