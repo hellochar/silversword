@@ -37,7 +37,7 @@ function updateProfile() {
     var profile = new THREE.SplineCurve(pointsV2);
     $('#canvas_profile')[0].profile = profile;
 
-    window.shouldUpdateUI = true;
+    window.requestUpdateUI();
 }
 
 

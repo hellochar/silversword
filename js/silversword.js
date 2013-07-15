@@ -1,5 +1,11 @@
 (function() {
 
+    var shouldUpdateUI = false;
+
+    window.requestUpdateUI = function() {
+        shouldUpdateUI = true;
+    }
+
     var BASE_PRICE = 100; //dollars
     var PREASSEMBLED_COST = 50; //dollrs
 
@@ -36,7 +42,7 @@
         });
 
         $('.slider').on( "slide", function(evt, ui) {
-            window.shouldUpdateUI = true;
+            requestUpdateUI();
         });
 
         $('#buy_me').click(function(evt) {
@@ -87,7 +93,7 @@
             } else {
                 $("#checkmark").hide();
             }
-            window.shouldUpdateUI = true;
+            requestUpdateUI();
         }
 
         $("#pre-assembled")[0].checked = false;
@@ -101,46 +107,52 @@
         var diameter = $('#slider_diameter').slider("value");
         var extrudeZ = $('#slider_extrudeZ').slider("value");
         var aperture = 0.8 - $('#slider_aperture').slider("value");
-        var skew = $('#canvas_skew')[0].skew || new THREE.Vector2(1, 1);
-        var profile = $('#canvas_profile')[0].profile || new THREE.SplineCurve([new THREE.Vector2(1, 0), new THREE.Vector2(1, .5), new THREE.Vector2(1, 1)]);
+        var skew = $('#canvas_skew')[0].skew;
+        var profile = $('#canvas_profile')[0].profile;
 
         var preAssembled = $("#pre-assembled")[0].checked;
 
         recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile);
 
 
-        //taken from https://github.com/mrdoob/three.js/issues/581#issuecomment-14000527
-        function getCompoundBoundingBox(object3D) {
-            var box = null;
-            object3D.traverse(function (obj3D) {
-                var geometry = obj3D.geometry;
-                if (geometry === undefined) return;
-                geometry.computeBoundingBox();
-                if (box === null) {
-                    box = geometry.boundingBox;
-                } else {
-                    box.union(geometry.boundingBox);
-                }
-            });
-            return box;
-        }
+        if(window.sphere) {
+            //taken from https://github.com/mrdoob/three.js/issues/581#issuecomment-14000527
+            function getCompoundBoundingBox(object3D) {
+                var box = null;
+                object3D.traverse(function (obj3D) {
+                    var geometry = obj3D.geometry;
+                    if (geometry === undefined) return;
+                    geometry.computeBoundingBox();
+                    if (box === null) {
+                        box = geometry.boundingBox;
+                    } else {
+                        box.union(geometry.boundingBox);
+                    }
+                });
+                return box;
+            }
 
-        var totalBB = getCompoundBoundingBox(sphere);
-        var totalHeight = totalBB.max.y - totalBB.min.y,
-            totalDiameter = totalBB.max.x - totalBB.min.x; //the z coordinate would work here too
-        $('#dimensions_indicator').text( totalHeight.toFixed(2) +'" x ' + totalDiameter.toFixed(2) +'"');
+            var totalBB = getCompoundBoundingBox(sphere);
+            var totalHeight = totalBB.max.y - totalBB.min.y,
+                totalDiameter = totalBB.max.x - totalBB.min.x; //the z coordinate would work here too
+            $('#dimensions_indicator').text( totalHeight.toFixed(2) +'" x ' + totalDiameter.toFixed(2) +'"');
+        }
 
         var cost = BASE_PRICE;
         if(preAssembled) cost += PREASSEMBLED_COST;
         
         $('#cost_indicator').text('$' + cost.toFixed(2));
 
-        window.shouldUpdateUI = false;
+        shouldUpdateUI = false;
     }
 
     function recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile) {
         if(sphere != undefined) {
             scene.remove(sphere);
+        }
+        if(_.any(arguments, function(arg) { return arg === undefined; })) {
+            // exit early if some of the arguments aren't ready yet (AKA skew/profile still downloading)
+            return;
         }
 
         //DEFAULT SPHERE
@@ -282,7 +294,7 @@
         // axisScene.add(axis);
 
         window.sphere = undefined;
-        window.shouldUpdateUI = true;
+        requestUpdateUI();
 
     };
 
@@ -294,7 +306,7 @@
         camera.updateMatrix();
         camera.updateMatrixWorld(true);
 
-        if(window.shouldUpdateUI) {
+        if(shouldUpdateUI) {
             updateUI();
         }
         updateAxisPosition();

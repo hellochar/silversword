@@ -87,5 +87,5 @@ void updateSkew() {
 
     $('#canvas_skew')[0].skew = new THREE.Vector2(skewX, skewY);
     
-    window.shouldUpdateUI = true;
+    window.requestUpdateUI();
 }
