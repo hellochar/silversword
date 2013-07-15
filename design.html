@@ -55,60 +55,13 @@
 
 
     <div id='design_wrapper'>
-        <div class="design" id="design_top">
-            <div class="design_left_side title" id="title_left">
+        <div class="design">
+            <div class="title">
                 Your Custom Lamp Design
             </div>
-            <div class="design_right_side title" id="title_right">
-                Customization Parameters
-            </div>
-        </div>
+            <div id='container'></div>
 
-        <div class="design" id="design_middle">
-            <div class="design_left_side">
-                <div id='container'></div>
-            </div>
-            <div class="design_right_side" id='input'>
-                <div class='row thin_row'>
-                    <div class='right_left_side'># Latitudes</div>
-                    <div class='slider right_right_side' id='slider_lat'></div>
-                </div>
-                <div class='row thin_row'>
-                    <div class='right_left_side'># Longitudes</div>
-                    <div class='slider right_right_side' id='slider_lon'></div>
-                </div>
-
-                <div class='row thin_row'>
-                    <div class='right_left_side'>Diameter</div>
-                    <div class='slider right_right_side' id='slider_diameter'></div>
-                </div>
-
-                <div class='row thin_row'>
-                    <div class='right_left_side'>Cone Height</div>
-                    <div class='slider right_right_side' id='slider_extrudeZ'></div>
-                </div>
-
-                <div class='row thin_row'>
-                    <div class='right_left_side'>Aperture</div>
-                    <div class='slider right_right_side' id='slider_aperture'></div>
-                </div>
-
-                <div class='row' id='pdes'>
-                    <div class='right_left_side'>
-                        <span class='pde_label'>Profile Modifier</span>
-                        <canvas id='canvas_profile' data-processing-sources="pde/profile_control.pde"></canvas>
-                    </div>
-                    <div class='right_right_side'>
-                        <span class='pde_label'>Skew</span>
-                        <canvas id='canvas_skew' data-processing-sources="pde/skew_control.pde"></canvas>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="design" id="design_bottom">
-            <div class="design_left_side">
+            <div id="indicators">
                 <div id='dimensions' class='outset outset-black'>
                     Total Height x Diameter
                     <br>
@@ -122,10 +75,48 @@
                     <br>
                     <span id='cost_indicator'></span>
                 </div>
-
             </div>
         </div>
 
+        <div class="design">
+            <div class="title">
+                Customization Parameters
+            </div>
+            <div class='row thin_row'>
+                <div class='right_left_side'># Latitudes</div>
+                <div class='slider right_right_side' id='slider_lat'></div>
+            </div>
+            <div class='row thin_row'>
+                <div class='right_left_side'># Longitudes</div>
+                <div class='slider right_right_side' id='slider_lon'></div>
+            </div>
+
+            <div class='row thin_row'>
+                <div class='right_left_side'>Diameter</div>
+                <div class='slider right_right_side' id='slider_diameter'></div>
+            </div>
+
+            <div class='row thin_row'>
+                <div class='right_left_side'>Cone Height</div>
+                <div class='slider right_right_side' id='slider_extrudeZ'></div>
+            </div>
+
+            <div class='row thin_row'>
+                <div class='right_left_side'>Aperture</div>
+                <div class='slider right_right_side' id='slider_aperture'></div>
+            </div>
+
+            <div class='row' id='pdes'>
+                <div class='right_left_side'>
+                    <span class='pde_label'>Profile Modifier</span>
+                    <canvas id='canvas_profile' data-processing-sources="pde/profile_control.pde"></canvas>
+                </div>
+                <div class='right_right_side'>
+                    <span class='pde_label'>Skew</span>
+                    <canvas id='canvas_skew' data-processing-sources="pde/skew_control.pde"></canvas>
+                </div>
+            </div>
+        </div>
 
     </div>
 

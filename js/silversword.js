@@ -127,18 +127,16 @@ function recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, p
 }
 
 function init() {
+    var $container = $('#container');
+
     // set the scene size
-    var WIDTH = 592, HEIGHT = 430;
+    var WIDTH = $container.width(), HEIGHT = $container.height();
 
     // set some camera attributes
     var VIEW_ANGLE = 60,
         ASPECT = WIDTH / HEIGHT,
         NEAR = 0.1,
         FAR = 10000;
-
-    // get the DOM element to attach to
-    // - assume we've got jQuery to hand
-    var $container = $('#container');
 
     renderer = Detector.webgl ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer();
     camera = new THREE.PerspectiveCamera(  VIEW_ANGLE,
