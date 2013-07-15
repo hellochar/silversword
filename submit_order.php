@@ -31,10 +31,12 @@ function send_email_order($order_number, $data) {
 Attached is info for order #$order_number. Other info can go here in the body.
 ";
 
-    $data = $order_number . "\r\n" . $data;
-	file_put_contents("data.txt", $data);
+    $attachmentName = "Order {$order_number}.txt";
 
-	$mail->AddAttachment("data.txt");
+    $data = $order_number . "\r\n" . $data;
+	file_put_contents($attachmentName, $data);
+
+	$mail->AddAttachment($attachmentName);
 
 	//Send the message, check for errors
 	if(!$mail->Send()) {
@@ -43,7 +45,7 @@ Attached is info for order #$order_number. Other info can go here in the body.
 		echo "Order #$order_number sent!";
 	}
 
-	unlink("data.txt");
+	unlink($attachmentName);
 }
 
 $order_number = increment_order_number();
