@@ -37,7 +37,7 @@
 <div id="navbarbackground">
   <div id="navcenter">
     <div id="navbarwrapper">
-  	  <div id="navdiv"></div>
+      <div id="navdiv"></div>
       <div id="navbutton"><a href="index.html">About Our Lamps</a></div>
       <div id="navdiv"></div>
       <div id="navbutton"><a href="index.html">Design / Assembly Help</a></div>
@@ -56,10 +56,10 @@
 
     <div id='design_wrapper'>
         <div class="design" id="design_top">
-            <div class="design_left_side">
-                Rendered View of Lamp
+            <div class="design_left_side title" id="title_left">
+                Your Custom Lamp Design
             </div>
-            <div class="design_right_side">
+            <div class="design_right_side title" id="title_right">
                 Customization Parameters
             </div>
         </div>
@@ -93,7 +93,7 @@
                     <div class='slider right_right_side' id='slider_aperture'></div>
                 </div>
 
-                <div class='row'>
+                <div class='row' id='pdes'>
                     <div class='right_left_side'>
                         <span class='pde_label'>Profile Modifier</span>
                         <canvas id='canvas_profile' data-processing-sources="pde/profile_control.pde"></canvas>

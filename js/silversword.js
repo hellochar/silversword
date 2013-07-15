@@ -128,7 +128,7 @@ function recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, p
 
 function init() {
     // set the scene size
-    var WIDTH = 624, HEIGHT = 430;
+    var WIDTH = 592, HEIGHT = 430;
 
     // set some camera attributes
     var VIEW_ANGLE = 60,
