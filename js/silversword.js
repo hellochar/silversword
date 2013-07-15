@@ -13,8 +13,8 @@
         $('#slider_lon').slider({
             min: 6,
             max: 18,
-            step: 3,
-            value: 15
+            step: 2,
+            value: 12
         });
         $('#slider_diameter').slider({
             min: 6,
