@@ -17,7 +17,7 @@ body {
 #design_wrapper {
     width: 1002px;
     height: 588px;
-    margin: 0px auto;
+    margin: 0px 9px;
 }
 
 #design_wrapper *:focus {
@@ -45,53 +45,54 @@ body {
     margin: auto;
     border: 5px solid #303030;
     border-radius: 16px;
-    width: 588px;
-    height: 430px;
+    width: 592px;
+    height: 432px;
+}
+
+#dimensions {
+    font-size: 14px;
+    margin-top: -45px;
+    color: #cccccc;
 }
 
 #indicators {
-    position: relative;
     height: 92px;
+    position: absolute;
+    bottom: 0px;
 }
 .outset {
     display: inline-block;
     color: #cccccc;
     border-radius: 10px;
     height: 44px;
-    margin-top: 27px;
-    margin-bottom: 23px;
+    margin-top: 32px;
     text-align: center;
-    position: absolute;
 }
 
-#dimensions {
-    left: 0px;
-    width: 196px;
+.outset-black {
+    padding-top: 3px;
+    height: 41px;
+}
+
+#pre-assembled {
+    width: 216px;
 }
 
 #buy_me {
-    left: 244px;
-    width: 146px;
-    font-size: 18px;
+    margin-left: 8px;
+    margin-right: 8px;
+    width: 147px;
+    vertical-align: super;
+    position: relative;
+    top: -4px;
+
+    font-size: 16px;
+    font-weight: bold;
 }
 
 #cost {
-    right: -5px;
-    width: 196px;
+    width: 216px;
 }
-
-.outset-pink {
-    border: none;
-}
-
-.outset-pink:hover {
-    cursor: pointer;
-}
-
-.outset-pink:active {
-    background: #6f0024;
-}
-
 
 /* ======== PARAMETERS (RIGHT SECTION) ========= */
 
@@ -181,3 +182,17 @@ body {
     background: linear-gradient(to bottom,  #d64f80 0%,#7f0030 35%,#7f0030 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d64f80', endColorstr='#7f0030',GradientType=0 ); /* IE6-8 */
 }
+
+/* Making outset-pink feel like a button */
+.outset-pink {
+    border: none;
+}
+
+.outset-pink:hover {
+    cursor: pointer;
+}
+
+.outset-pink:active {
+    background: #6f0024;
+}
+
