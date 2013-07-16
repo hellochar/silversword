@@ -9,57 +9,32 @@
     var BASE_PRICE = 100; //dollars
     var PREASSEMBLED_COST = 50; //dollrs
 
-    function resetUIElements() {
-        for(var paramName in window.DEFAULT_SILVERSWORD_PARAMETERS) {
-            var selector = {
-                latitude: 'slider_lat',
-                longitude: 'slider_lon',
-                diameter: 'slider_diameter',
-                coneHeight: 'slider_extrudeZ',
-                aperture: 'slider_aperture'
-            }[paramName];
+    function resetUIElements(allSliderParameters) {
+        for(var sliderName in allSliderParameters) {
+            var $slider = $({
+                latitude: '#slider_lat',
+                longitude: '#slider_lon',
+                diameter: '#slider_diameter',
+                coneHeight: '#slider_extrudeZ',
+                aperture: '#slider_aperture'
+            }[sliderName]);
 
-            var input = window.DEFAULT_SILVERSWORD_PARAMETERS[paramName];
+            var userParameters = allSliderParameters[sliderName];
 
             var parameters = {
-                min: selector.min,
-                max: selector.max,
-                value: selector.default,
-                step: selector.step,
-
+                min: userParameters.min, //required
+                max: userParameters.max, //required
+                value: userParameters['default'],
+                step: userParameters['step']
             }
 
+            _.defaults(parameters, {
+                value: (parameters.min + parameters.max) / 2,
+                step: (parameters.max - parameters.min) / $slider.width()
+            });
+
+            $slider.slider(parameters);
         }
-        //setting up elements
-        $('#slider_lat').slider({
-            min: 3,
-            max: 8,
-            value: 7
-        });
-        $('#slider_lon').slider({
-            min: 6,
-            max: 18,
-            step: 2,
-            value: 12
-        });
-        $('#slider_diameter').slider({
-            min: 6,
-            max: 30,
-            step: (30 - 6) / $('#slider_diameter').width(),
-            value: 10
-        });
-        $('#slider_extrudeZ').slider({
-            min: 0,
-            max: 1,
-            step: (1 - 0) / $('#slider_extrudeZ').width(),
-            value: 0.3
-        });
-        $('#slider_aperture').slider({
-            min: 0,
-            max: .8,
-            step: (.8 - 0) / $('#slider_aperture').width(),
-            value: .4
-        });
 
         $('.slider').on( "slide", function(evt, ui) {
             requestUpdateUI();
@@ -96,9 +71,8 @@
                 });
         });
     }
-    resetUIElements();
 
-    function initializeCheckbox() {
+    function initializeCheckbox(defaultChecked) {
         $("#pre-assembled").click(function(x) {
             var isChecked = $("#pre-assembled")[0].checked;
             $("#pre-assembled")[0].checked = !isChecked;
@@ -116,10 +90,9 @@
             requestUpdateUI();
         }
 
-        $("#pre-assembled")[0].checked = false;
+        $("#pre-assembled")[0].checked = !!defaultChecked;
         updateView();
     }
-    initializeCheckbox();
 
     function updateUI() {
         var NUM_LON = $('#slider_lon').slider("value");
@@ -353,7 +326,12 @@
 
     }
 
-    init();
-    render();
+    $.get('parameters.txt', function(paramsAsString) {
+        var parameters = jsyaml.load(paramsAsString);
+        initializeCheckbox(parameters.preassemble);
+        resetUIElements(parameters);
+        init();
+        render();
+    });
 
 })();
