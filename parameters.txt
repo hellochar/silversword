@@ -27,3 +27,6 @@ aperture:
     isRTL: true
 
 preassemble: true
+
+BASE_PRICE: 149.99
+PREASSEMBLED_COST: 50.00

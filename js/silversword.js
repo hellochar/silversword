@@ -1,13 +1,81 @@
 (function() {
 
+    var BASE_PRICE = 149.99; //dollars
+    var PREASSEMBLED_COST = 50;
+
     var shouldUpdateUI = false;
 
     window.requestUpdateUI = function() {
         shouldUpdateUI = true;
     }
 
-    var BASE_PRICE = 100; //dollars
-    var PREASSEMBLED_COST = 50; //dollrs
+    window.paramStateToJSON = function() {
+        return {
+            longitudes: $('#slider_lon').slider("value"),
+            latitudes: $('#slider_lat').slider("value"),
+            diameter: $('#slider_diameter').slider("value"),
+            extrudeZ: $('#slider_extrudeZ').slider("value"),
+            aperture: $('#slider_aperture').slider("value"),
+            skew: $('#canvas_skew')[0].skew,
+            profile: $('#canvas_profile')[0].profile
+        };
+    }
+
+    THREE.SplineCurve.prototype.toJSON = function() { return this.points; }
+    window.paramStateToFlatJSON = function() {
+        var nested = window.paramStateToJSON();
+
+        return JSON.parse(JSON.stringify(nested));
+    }
+
+    window.paramStateFromFlatJSON = function(json) {
+        var sliders = {
+            longitudes: $('#slider_lon'),
+            latitudes: $('#slider_lat'),
+            diameter: $('#slider_diameter'),
+            extrudeZ: $('#slider_extrudeZ'),
+            aperture: $('#slider_aperture'),
+            skew: function(skew) {
+                Processing.getInstanceById("canvas_skew").setSkew(skew.x, skew.y);
+            },
+            profile: function(profile) {
+                if( !Processing.getInstanceById("canvas_profile").setProfileModel ) {
+                    debugger
+                }
+                Processing.getInstanceById("canvas_profile").setProfileModel(profile);
+            }
+        };
+        for(var key in sliders) {
+            if(! (key in json)) {
+                throw {
+                    name: "KeyError",
+                    message: key + " not specified!",
+                };
+            }
+            if($.type(sliders[key]) == "function") {
+                sliders[key](json[key]);
+            } else {
+                sliders[key].slider("value", json[key]);
+            }
+        }
+    }
+
+    window.stateToURL = function() {
+        var json = window.paramStateToFlatJSON();
+        return location.origin + location.pathname + "?" + $.param(json);
+    }
+
+    window.tryLoadStateFromURL = function() {
+        console.log("loading state from URL!");
+        var jsonStringValues = $.url().param();
+        json = JSON.parse(JSON.stringify(jsonStringValues), function(key, value) {
+            if( !isNaN(parseFloat(value)) ) {
+                return parseFloat(value);
+            }
+            return value;
+        });
+        window.paramStateFromFlatJSON(json);
+    }
 
     function resetUIElements(allSliderParameters) {
         for(var sliderName in allSliderParameters) {
@@ -56,10 +124,10 @@
             });
             
             var text = txtLines.join("\r\n");
-            console.log(text);
             $.post("/submit_order.php",
                 {
-                    data : text
+                    data : text,
+                    ss_url : stateToURL()
                 },
                 function (data, status, jqXHR) {
                     console.log(arguments);
@@ -101,7 +169,6 @@
         var diameter = $('#slider_diameter').slider("value");
         var extrudeZ = $('#slider_extrudeZ').slider("value");
         var aperture = $('#slider_aperture').slider("value");
-        console.log("aperture: ", aperture)
         var skew = $('#canvas_skew')[0].skew;
         var profile = $('#canvas_profile')[0].profile;
 
@@ -328,12 +395,49 @@
 
     }
 
-    $.get('parameters.txt', function(paramsAsString) {
-        var parameters = jsyaml.load(paramsAsString);
-        initializeCheckbox(parameters.preassemble);
-        resetUIElements(parameters);
-        init();
-        render();
-    });
+    (function() {
+        var skew_loaded = false,
+            profile_loaded = false,
+            parameters_loaded = false;
+
+        $(window).on("skew_control_loaded", function() {
+            console.log("1");
+            skew_loaded = true;
+            tryInitialize();
+        });
+
+        $(window).on("profile_control_loaded", function() {
+            console.log("2");
+            profile_loaded = true;
+            tryInitialize();
+        });
+
+        $.get('parameters.txt', function(paramsAsString) {
+            parameters_loaded = paramsAsString;
+            console.log("3");
+            tryInitialize();
+        });
+
+        function tryInitialize() {
+            if( skew_loaded === true && profile_loaded === true &&
+                !!(parameters_loaded) === true) {
+                var parameters = jsyaml.load(parameters_loaded);
+                initializeCheckbox(parameters.preassemble);
+                BASE_PRICE = parameters.BASE_PRICE;
+                PREASSEMBLED_COST = parameters.PREASSEMBLED_COST;
+                resetUIElements(parameters);
+                if(! _.isEmpty($.url().param()) ) {
+                    try {
+                        tryLoadStateFromURL();
+                    } catch(err) {
+                        //TODO modal dialog for bad configuration
+                        throw err;
+                    }
+                }
+                init();
+                render();
+            }
+        }
+    })();
 
 })();

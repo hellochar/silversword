@@ -13,14 +13,14 @@ function updateMousePosition(e) {
 function offCanvasMoveListener(e) {
     if(e.which && mousePressed) {
         updateMousePosition(e);
-        updateSkew();
+        setSkewToMouse();
     }
 }
 
 function offCanvasUpListener(e) {
     if(mousePressed) {
         updateMousePosition(e);
-        updateSkew();
+        setSkewToMouse();
         mousePressed = false;
         mouseReleased();
     }
@@ -46,13 +46,15 @@ void setup() {
     size(234, 234);
     mouseX = width/2;
     mouseY = height/2;
-    updateSkew();
+    if( ! $('#canvas_skew')[0].skew ) {
+        setSkew(0, 0);
+    }
 }
 
 
 void draw() {
     if(mousePressed) {
-        updateSkew();
+        setSkewToMouse();
     }
 
     background(48);
@@ -80,12 +82,22 @@ void draw() {
     ellipse(skew.x, -skew.y, .25, .25);
 }
 
-void updateSkew() {
+void setSkewToMouse() {
     constrainMousePosition();
     float skewX = map(mouseX, 0, width,  minBound, maxBound);
     float skewY = map(mouseY, 0, height, maxBound, minBound);
 
-    $('#canvas_skew')[0].skew = new THREE.Vector2(skewX, skewY);
-    
+    setSkew(skewX, skewY);
+}
+
+void setSkew(skewX, skewY) {
+    $('#canvas_skew')[0].skew = new THREE.Vector2(constrain(skewX, minBound, maxBound), constrain(skewY, minBound, maxBound));
+
     window.requestUpdateUI();
 }
+
+setTimeout(function() {
+    $(window).trigger("skew_control_loaded");
+}, 0)
+
+void fixLastFunctionNotExportedBug() {}

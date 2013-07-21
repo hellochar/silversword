@@ -1,5 +1,6 @@
 //all points are in screen coordinates
 function Point(x, y, frozenY) {
+    //
     this.x = x;
     this.y = y;
     this.frozenY = frozenY;
@@ -10,6 +11,7 @@ function Point(x, y, frozenY) {
         if(!this.frozenY) this.y = y;
         this.x = x;
     }
+    //convert to multiplier coordinates
     this.toVector2 = function() {
         float xMapped = pow(2, map(this.x, 0, width, -1, 1)),
               yMapped = map(this.y, 0, height, 1, 0);
@@ -25,8 +27,8 @@ float log2(float x) {
     return log(x) / log(2);
 }
 
+// Given multiplier coordinates, convert to screen coordinates
 function fromVector2(v2) {
-
     float x = map(log2(v2.x), -1, 1, 0, width);
     float y = map(v2.y, 1, 0, 0, height);
     return new Point(x, y, false);
@@ -143,3 +145,20 @@ void draw() {
         ellipse(pt.x, pt.y, pt.radius, pt.radius);
     });
 }
+
+//pointsArray is an array of 3 values of multiplier coordinates
+void setProfileModel(pointsArray) {
+
+    _.each(pointsArray, function (multiplierPoint, idx) {
+        screenPoint = fromVector2(multiplierPoint);
+        points[idx].trySetPosition(screenPoint.x, screenPoint.y);
+    });
+
+    updateProfile();
+}
+
+setTimeout(function() {
+    $(window).trigger("profile_control_loaded");
+}, 0)
+
+void fixLastFunctionNotExportedBug() {}

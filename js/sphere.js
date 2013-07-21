@@ -36,6 +36,7 @@ function Sphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile) {
     }
 
 }
+
 Sphere.prototype = Object.create( THREE.Object3D.prototype );
 
 /*

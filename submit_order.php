@@ -16,19 +16,21 @@ function increment_order_number() {
     return $number;
 }
 
-function send_email_order($order_number, $data) {
+function send_email_order($order_number, $data, $ss_url) {
 	//Create a new PHPMailer instance
 	$mail = new PHPMailer();
 
 	//Set who the message is to be sent to
-	$mail->AddAddress("orders@silverswordlighting.com");
+	$mail->AddAddress("hellocharlien@hotmail.com");
 
-	$mail->IsHTML(false);
+	$mail->IsHTML(true);
 
 	$mail->Subject = "#$order_number";
 	$mail->Body = "Hello Adam!
 
-Attached is info for order #$order_number. Other info can go here in the body.
+        Attached is info for order #$order_number.
+        View it at <a href=\"$ss_url\">$ss_url</a>.
+        Other info can go here in the body.
 ";
 
     $attachmentName = "Order {$order_number}.txt";
@@ -49,7 +51,8 @@ Attached is info for order #$order_number. Other info can go here in the body.
 }
 
 $order_number = increment_order_number();
-$data = $_POST['data']; 
+$data = $_POST['data'];
+$ss_url = $_POST['ss_url'];
 
 send_email_order($order_number, $data);
 ?>
