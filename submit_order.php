@@ -56,7 +56,7 @@ function send_email_order($order_number, $data, $ss_url, $image) {
 	}
 
 	unlink($attachmentName);
-    // unlink($imageName);
+    unlink($imageName);
 }
 
 $order_number = increment_order_number();

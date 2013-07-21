@@ -48,7 +48,7 @@
             if(! (key in json)) {
                 throw {
                     name: "KeyError",
-                    message: key + " not specified!",
+                    message: key + " not specified!"
                 };
             }
             if($.type(sliders[key]) == "function") {
