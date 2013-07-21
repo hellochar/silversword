@@ -123,10 +123,12 @@
             });
             
             var text = txtLines.join("\r\n");
+            var imageData = renderer.domElement.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "");
             $.post("/submit_order.php",
                 {
                     data : text,
-                    ss_url : stateToURL()
+                    ss_url : stateToURL(),
+                    imageData : imageData
                 },
                 function (data, status, jqXHR) {
                     console.log(arguments);
@@ -244,6 +246,7 @@
             FAR = 10000;
 
         renderer = Detector.webgl ? new THREE.WebGLRenderer({preserveDrawingBuffer : true }) : new THREE.CanvasRenderer();
+        renderer.setClearColorHex(0x000000, 1);
         camera = new THREE.PerspectiveCamera(  VIEW_ANGLE,
                 ASPECT,
                 NEAR,
