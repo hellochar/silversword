@@ -1,9 +1,6 @@
 <?php
 require 'class.phpmailer.php';
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 function increment_order_number() {
 	$number = file_get_contents("ORDER_NUMBER.txt");
 	if($number === FALSE) {
