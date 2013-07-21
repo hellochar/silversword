@@ -98,6 +98,8 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
         this.faces.push( face );
     }
 
+    this.computeCentroids();
+
 }
 
 TrapezoidGeometry.prototype = Object.create( THREE.Geometry.prototype );

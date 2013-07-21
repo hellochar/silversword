@@ -24,9 +24,8 @@ function Sphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile) {
                 color: 0xFFFFFF,
                 side: THREE.DoubleSide
             });
-            // var materialStroke = new THREE.MeshLambert
+
             var mesh = new THREE.Mesh(geometry, materialFill);
-            // mesh.overdraw = true;
             this.add(mesh);
 
             if( this.trapezoids[latIndex] === undefined ) {

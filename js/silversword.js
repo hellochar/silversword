@@ -243,7 +243,7 @@
             NEAR = 0.1,
             FAR = 10000;
 
-        renderer = Detector.webgl ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer();
+        renderer = Detector.webgl ? new THREE.WebGLRenderer({preserveDrawingBuffer : true }) : new THREE.CanvasRenderer();
         camera = new THREE.PerspectiveCamera(  VIEW_ANGLE,
                 ASPECT,
                 NEAR,
