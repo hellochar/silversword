@@ -65,7 +65,6 @@
     }
 
     window.tryLoadStateFromURL = function() {
-        console.log("loading state from URL!");
         var jsonStringValues = $.url().param();
         json = JSON.parse(JSON.stringify(jsonStringValues), function(key, value) {
             if( !isNaN(parseFloat(value)) ) {
@@ -131,7 +130,6 @@
                     imageData : imageData
                 },
                 function (data, status, jqXHR) {
-                    console.log(arguments);
                     if(status != "success") {
                         alert("something went wrong: " + data);
                     }
@@ -402,21 +400,20 @@
             profile_loaded = false,
             parameters_loaded = false;
 
+        // poor man's promises
+
         $(window).on("skew_control_loaded", function() {
-            console.log("1");
             skew_loaded = true;
             tryInitialize();
         });
 
         $(window).on("profile_control_loaded", function() {
-            console.log("2");
             profile_loaded = true;
             tryInitialize();
         });
 
         $.get('parameters.txt', function(paramsAsString) {
             parameters_loaded = paramsAsString;
-            console.log("3");
             tryInitialize();
         });
 
@@ -425,9 +422,11 @@
                 !!(parameters_loaded) === true) {
                 var parameters = jsyaml.load(parameters_loaded);
                 initializeCheckbox(parameters.preassemble);
-                BASE_PRICE = parameters.BASE_PRICE || 149.99;
+                BASE_PRICE = parameters.BASE_PRICE || 149.99; //default costs in case they're not specified
                 PREASSEMBLED_COST = parameters.PREASSEMBLED_COST || 50.00;
+
                 resetUIElements(parameters);
+
                 if(! _.isEmpty($.url().param()) ) {
                     try {
                         tryLoadStateFromURL();
