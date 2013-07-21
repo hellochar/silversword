@@ -1,7 +1,6 @@
 (function() {
 
-    var BASE_PRICE = 149.99; //dollars
-    var PREASSEMBLED_COST = 50;
+    var BASE_PRICE, PREASSEMBLED_COST; // in dollars
 
     var shouldUpdateUI = false;
 
@@ -423,8 +422,8 @@
                 !!(parameters_loaded) === true) {
                 var parameters = jsyaml.load(parameters_loaded);
                 initializeCheckbox(parameters.preassemble);
-                BASE_PRICE = parameters.BASE_PRICE;
-                PREASSEMBLED_COST = parameters.PREASSEMBLED_COST;
+                BASE_PRICE = parameters.BASE_PRICE || 149.99;
+                PREASSEMBLED_COST = parameters.PREASSEMBLED_COST || 50.00;
                 resetUIElements(parameters);
                 if(! _.isEmpty($.url().param()) ) {
                     try {

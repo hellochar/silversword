@@ -21,16 +21,17 @@ function send_email_order($order_number, $data, $ss_url) {
 	$mail = new PHPMailer();
 
 	//Set who the message is to be sent to
-	$mail->AddAddress("hellocharlien@hotmail.com");
+	$mail->AddAddress("orders@silverswordlighting.com");
 
 	$mail->IsHTML(true);
 
 	$mail->Subject = "#$order_number";
-	$mail->Body = "Hello Adam!
+	$mail->Body = "<h3>Hello Adam!</h3>
 
+        <p>
         Attached is info for order #$order_number.
         View it at <a href=\"$ss_url\">$ss_url</a>.
-        Other info can go here in the body.
+        </p>
 ";
 
     $attachmentName = "Order {$order_number}.txt";
@@ -42,7 +43,7 @@ function send_email_order($order_number, $data, $ss_url) {
 
 	//Send the message, check for errors
 	if(!$mail->Send()) {
-		echo "Order #$order_number Mailer Error: " . $mail->ErrorInfo;
+		echo "Order #$order_number Mailer Error: " . $mail->ErrorInfo . "\n:" . print_r(error_get_last(), true) . "!!!";
 	} else {
 		echo "Order #$order_number sent!";
 	}
@@ -54,5 +55,5 @@ $order_number = increment_order_number();
 $data = $_POST['data'];
 $ss_url = $_POST['ss_url'];
 
-send_email_order($order_number, $data);
+send_email_order($order_number, $data, $ss_url);
 ?>
