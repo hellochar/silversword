@@ -25,7 +25,8 @@
                 min: userParameters.min, //required
                 max: userParameters.max, //required
                 value: userParameters['default'],
-                step: userParameters['step']
+                step: userParameters['step'],
+                isRTL: userParameters['isRTL']
             }
 
             _.defaults(parameters, {
@@ -99,7 +100,8 @@
         var NUM_LAT = $('#slider_lat').slider("value");
         var diameter = $('#slider_diameter').slider("value");
         var extrudeZ = $('#slider_extrudeZ').slider("value");
-        var aperture = 0.8 - $('#slider_aperture').slider("value");
+        var aperture = $('#slider_aperture').slider("value");
+        console.log("aperture: ", aperture)
         var skew = $('#canvas_skew')[0].skew;
         var profile = $('#canvas_profile')[0].profile;
 

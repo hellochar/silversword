@@ -23,6 +23,7 @@ coneHeight:
 aperture:
     min: 0
     max: 0.8
-    default: 0.4
+    default: 0.2
+    isRTL: true
 
 preassemble: true
