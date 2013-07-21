@@ -1,4 +1,4 @@
-*.png
+/*.png
 *.grf
 ORDER_NUMBER.txt
 compiler.jar
