@@ -5,11 +5,15 @@ function Point(x, y, frozenY) {
     this.y = y;
     this.frozenY = frozenY;
 
-    this.radius = 40;
+    this.radius = 22;
 
     this.trySetPosition = function(x, y) {
         if(!this.frozenY) this.y = y;
         this.x = x;
+    }
+    this.tryMovePosition = function(dx, dy) {
+        if(!this.frozenY) this.y += dy;
+        this.x += dx;
     }
     //convert to multiplier coordinates
     this.toVector2 = function() {
@@ -83,12 +87,29 @@ void setup() {
     updateProfile();
 }
 
-
-void mousePressed() {
+void getDraggedOption() {
     //get closest point
-    draggedOption = _.filter(points, function (pt) {
+    var draggedOption = _.filter(points, function (pt) {
         return pt.hitsMe(mouseX, mouseY);
     }).slice(0, 1);
+
+    return draggedOption;
+}
+
+
+float pressedX,
+      pressedY,
+      pressedPointX,
+      pressedPointY;
+void mousePressed() {
+    pressedX = mouseX;
+    pressedY = mouseY;
+    draggedOption = getDraggedOption();
+
+    _.each(draggedOption, function (pt) {
+        pressedPointX = pt.x;
+        pressedPointY = pt.y;
+    });
 
     $('body').on('mousemove', offCanvasMoveListener).on('mouseup', offCanvasUpListener);
 }
@@ -102,7 +123,8 @@ void mouseReleased() {
 void mouseDragged() {
     _.each(draggedOption, function (pt) {
         constrainMousePosition();
-        pt.trySetPosition(mouseX, mouseY);
+        /* pt.tryMovePosition(mouseX - pmouseX, mouseY - pmouseY); */
+        pt.trySetPosition(pressedPointX + mouseX - pressedX, pressedPointY + mouseY - pressedY);
         updateProfile();
     });
 }
@@ -139,10 +161,13 @@ void draw() {
         ellipse(pt.x, pt.y, 16, 16);
     });
 
-    _.each(draggedOption, function (pt) {
+    var maybeDragged = draggedOption;
+    if(maybeDragged.length === 0)
+        maybeDragged = getDraggedOption();
+    _.each(maybeDragged, function (pt) {
         noFill();
         stroke(255);
-        ellipse(pt.x, pt.y, pt.radius, pt.radius);
+        ellipse(pt.x, pt.y, pt.radius * 2, pt.radius * 2);
     });
 }
 
