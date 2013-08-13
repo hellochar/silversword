@@ -1,19 +1,8 @@
 //all points are in screen coordinates
 function Point(x, y, frozenY) {
-    //
-    this.x = x;
-    this.y = y;
-    this.frozenY = frozenY;
-
-    this.radius = 22;
-
     this.trySetPosition = function(x, y) {
-        if(!this.frozenY) this.y = y;
-        this.x = x;
-    }
-    this.tryMovePosition = function(dx, dy) {
-        if(!this.frozenY) this.y += dy;
-        this.x += dx;
+        if(!this.frozenY) this.y = constrain(y, 0, height);
+        this.x = constrain(x, 0, width);
     }
     //convert to multiplier coordinates
     this.toVector2 = function() {
@@ -25,6 +14,15 @@ function Point(x, y, frozenY) {
     this.hitsMe = function(x, y) {
         return dist(this.x, this.y, mouseX, mouseY) < this.radius;
     }
+
+
+
+
+    this.trySetPosition(x, y);
+    this.frozenY = frozenY;
+
+    this.radius = 22;
+
 }
 
 float log2(float x) {
@@ -68,11 +66,6 @@ function offCanvasUpListener(e) {
     mouseReleased();
 }
 
-function constrainMousePosition() {
-    var constrainRadius = 8;
-    mouseX = constrain(mouseX, constrainRadius, width - constrainRadius);
-    mouseY = constrain(mouseY, constrainRadius, height - constrainRadius);
-}
 /* ======================================================== */
 
 var draggedOption = [];
@@ -111,19 +104,17 @@ void mousePressed() {
         pressedPointY = pt.y;
     });
 
-    $('body').on('mousemove', offCanvasMoveListener).on('mouseup', offCanvasUpListener);
+    $('html').on('mousemove', offCanvasMoveListener).on('mouseup', offCanvasUpListener);
 }
 
 void mouseReleased() {
     draggedOption = [];
 
-    $('body').off('mousemove', offCanvasMoveListener).off('mouseup', offCanvasUpListener);
+    $('html').off('mousemove', offCanvasMoveListener).off('mouseup', offCanvasUpListener);
 }
 
 void mouseDragged() {
     _.each(draggedOption, function (pt) {
-        constrainMousePosition();
-        /* pt.tryMovePosition(mouseX - pmouseX, mouseY - pmouseY); */
         pt.trySetPosition(pressedPointX + mouseX - pressedX, pressedPointY + mouseY - pressedY);
         updateProfile();
     });
@@ -161,14 +152,12 @@ void draw() {
         ellipse(pt.x, pt.y, 16, 16);
     });
 
-    var maybeDragged = draggedOption;
-    if(maybeDragged.length === 0)
-        maybeDragged = getDraggedOption();
-    _.each(maybeDragged, function (pt) {
+    _.each(draggedOption, function (pt) {
         noFill();
         stroke(255);
         ellipse(pt.x, pt.y, pt.radius * 2, pt.radius * 2);
     });
+
 }
 
 //pointsArray is an array of 3 values of multiplier coordinates
