@@ -107,7 +107,7 @@
             requestUpdateUI();
         });
 
-        $('#buy_me').click(function(evt) {
+        $('#add_to_cart').click(function(evt) {
             /*
              * # lat
              * # lon
@@ -329,7 +329,7 @@
 
             var axis = new THREE.Object3D();
 
-            //same dark red color as the bottom of the "Buy Your Lamp" button
+            //same dark red color as the bottom of the "Add to Cart" button
             var topArrow = makeThickArrowMesh({color: 0x9A003C, ambient: 0xFF0063});
             axis.add(topArrow);
 
