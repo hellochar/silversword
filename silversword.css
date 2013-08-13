@@ -68,7 +68,10 @@ body {
 
 #dimensions {
     font-size: 14px;
-    margin-top: -45px;
+    float: left;
+    position: relative;
+    top: -45px;
+    left: 15px;
     color: #cccccc;
 }
 
