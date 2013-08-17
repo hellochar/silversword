@@ -1,5 +1,4 @@
-float maxX = 3,
-      maxY = 3;
+float maxX, maxY;
 
 /* =============    OFF CANVAS DRAGGING       =========== */
 function updateMousePosition(e) {
@@ -43,6 +42,9 @@ void mouseReleased() {
 /* ======================================================== */
 
 void setup() {
+    maxX = window.SS_PARAMETERS.skew.xMax
+    maxY = window.SS_PARAMETERS.skew.yMax
+
     size(234, 234);
     mouseX = width/2;
     mouseY = height/2;

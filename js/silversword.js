@@ -398,7 +398,7 @@
     (function() {
         var skew_loaded = false,
             profile_loaded = false,
-            parameters_loaded = false;
+            parameters = false;
 
         // poor man's promises
 
@@ -413,14 +413,18 @@
         });
 
         $.get('parameters.txt', function(paramsAsString) {
-            parameters_loaded = paramsAsString;
+            parameters = jsyaml.load(paramsAsString);
+            window.SS_PARAMETERS = parameters;
+            $.get("pde/skew_control.pde", function (src) {
+                var canvas = $("#canvas_skew")[0];
+                new Processing(canvas, src);
+            });
             tryInitialize();
         });
 
         function tryInitialize() {
             if( skew_loaded === true && profile_loaded === true &&
-                !!(parameters_loaded) === true) {
-                var parameters = jsyaml.load(parameters_loaded);
+                !!(parameters) === true) {
                 initializeCheckbox(parameters.preassemble);
                 BASE_PRICE = parameters.BASE_PRICE || 149.99; //default costs in case they're not specified
                 PREASSEMBLED_COST = parameters.PREASSEMBLED_COST || 50.00;

@@ -28,5 +28,9 @@ aperture:
 
 preassemble: true
 
+skew:
+    xMax: 2
+    yMax: 2
+
 BASE_PRICE: 149.99
 PREASSEMBLED_COST: 50.00
