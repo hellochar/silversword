@@ -138,6 +138,23 @@
                     }
                 });
         });
+
+        $("#share_popup").dialog({
+            autoOpen: false,
+            modal: true,
+            draggable: false,
+            resizable: false,
+            width: 600
+        });
+
+        $("#share").click(function(evt) {
+            var url = stateToURL();
+            $("#share_popup").dialog( "open" );
+            $("#share_popup .share_link").attr("href", url).text(url).blur();
+        });
+        $("#share_popup_close").click(function(evt) {
+            $("#share_popup").dialog("close");
+        });
     }
 
     function initializeCheckbox(defaultChecked) {

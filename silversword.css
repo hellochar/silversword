@@ -49,12 +49,12 @@ body {
     top: 28px;
 }
 
-#need_help_div a {
+a.red {
     text-decoration: none;
     color: #EE008E;
 }
 
-#need_help_div a:hover {
+a.red:hover {
     color: #FF009E;
 }
 
@@ -76,6 +76,7 @@ body {
     text-align: left;
 }
 
+/* ======== BUTTONS ON THE BOTTOM ========= */
 #indicators {
     height: 92px;
     position: absolute;
@@ -116,6 +117,31 @@ body {
 #share {
     font-weight: bold;
     color: white;
+}
+
+#share_popup {
+    display: none;
+    color: white;
+}
+
+#share_popup_close {
+    float: none;
+    padding-top: 13px;
+    height: 31px;
+    border: none;
+    border-radius: 0px;
+}
+
+.ui-dialog {
+    text-align: center;
+    word-wrap: break-word;
+    font: inherit;
+    background: black;
+    border: none;
+}
+
+.ui-dialog-titlebar {
+    display: none;
 }
 
 #add_to_cart {
