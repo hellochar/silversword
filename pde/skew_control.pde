@@ -1,5 +1,5 @@
-float minBound = -2,
-      maxBound = 2;
+float maxX = 3,
+      maxY = 3;
 
 /* =============    OFF CANVAS DRAGGING       =========== */
 function updateMousePosition(e) {
@@ -58,40 +58,47 @@ void draw() {
     }
 
     background(48);
-    var scalar = width / (maxBound - minBound);
-    scale( scalar );
-    translate( (maxBound - minBound) / 2, (maxBound - minBound) / 2 );
+    float rangeX = 2*maxX,
+          rangeY = 2*maxY,
+          scalarX = width / rangeX,
+          scalarY = height / rangeY,
+          maxScalar = max(scalarX, scalarY);
+    scale( scalarX, scalarY );
+    translate( rangeX / 2, rangeY / 2 );
 
-    strokeWeight(.25 / scalar );
+    strokeWeight(1 / maxScalar );
 
-    for(float r = minBound; r < maxBound; r += .125) {
+    for(float r = -maxX; r < maxX; r++) {
         stroke(128);
-        line(minBound, r, maxBound, r);
-        line(r, minBound, r, maxBound);
+        line(r, -maxY, r, maxY);
+    }
+    for(float r = -maxY; r < maxY; r++) {
+        stroke(128);
+        line(-maxX, r, maxX, r);
     }
 
-    strokeWeight(1 / scalar );
+    strokeWeight(1 / maxScalar );
     stroke(255);
-    line(minBound, 0, maxBound, 0);
-    line(0, minBound, 0, maxBound);
+    line(-maxX, 0, maxX, 0);
+    line(0, -maxY, 0, maxY);
 
     noStroke();
     fill(255);
 
     var skew = $('#canvas_skew')[0].skew;
-    ellipse(skew.x, -skew.y, .25, .25);
+    ellipse(skew.x, -skew.y, 16 / scalarX, 16 / scalarY);
 }
 
 void setSkewToMouse() {
     constrainMousePosition();
-    float skewX = map(mouseX, 0, width,  minBound, maxBound);
-    float skewY = map(mouseY, 0, height, maxBound, minBound);
+    float skewX = map(mouseX, 0, width,  -maxX, maxX);
+    float skewY = map(mouseY, 0, height, maxY, -maxY);
 
     setSkew(skewX, skewY);
 }
 
 void setSkew(skewX, skewY) {
-    $('#canvas_skew')[0].skew = new THREE.Vector2(constrain(skewX, minBound, maxBound), constrain(skewY, minBound, maxBound));
+    $('#canvas_skew')[0].skew = new THREE.Vector2(constrain(skewX, -maxX, maxX), constrain(skewY, -maxY, maxY));
 
     window.requestUpdateUI();
 }
