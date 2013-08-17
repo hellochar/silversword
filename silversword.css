@@ -73,6 +73,7 @@ body {
     top: -45px;
     left: 15px;
     color: #cccccc;
+    text-align: left;
 }
 
 #indicators {
@@ -85,9 +86,17 @@ body {
     float: left;
     color: #cccccc;
     border-radius: 10px;
-    height: 44px;
-    margin-top: 32px;
     text-align: center;
+    height: 44px;
+    width: 114px;
+    margin: 32px 6px 0px 6px;
+}
+
+#indicators .outset:first-child {
+    margin-left: 0px;
+}
+#indicators .outset:last-child {
+    margin-right: 0px;
 }
 
 .outset-black {
@@ -104,17 +113,14 @@ body {
     display: inline-block;
 }
 
-#add_to_cart {
-    margin-left: 8px;
-    margin-right: 8px;
-    width: 147px;
-
-    font-size: 16px;
+#share {
     font-weight: bold;
+    color: white;
 }
 
-#cost {
-    width: 216px;
+#add_to_cart {
+    font-size: 16px;
+    font-weight: bold;
 }
 
 /* ======== PARAMETERS (RIGHT SECTION) ========= */
@@ -219,9 +225,9 @@ body {
     background: #6f0024;
 }
 
-/* Making pre-assembled feel like a button */
+/* Making outset-black-button feel like a button */
 
-#pre-assembled:hover {
+.outset-black-button:hover {
     background: #3d3d3d; /* Old browsers */
     background: -moz-linear-gradient(top,  #3d3d3d 0%, #060606 35%, #060606 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3d3d3d), color-stop(35%,#060606), color-stop(100%,#060606)); /* Chrome,Safari4+ */
@@ -231,15 +237,15 @@ body {
     background: linear-gradient(to bottom,  #3d3d3d 0%,#060606 35%,#060606 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3d3d3d', endColorstr='#020202',GradientType=0 ); /* IE6-9 */
 }
-#pre-assembled {
+.outset-black-button {
     border: none;
 }
 
-#pre-assembled:hover {
+.outset-black-button:hover {
     cursor: pointer;
 }
 
-#pre-assembled:active {
+.outset-black-button:active {
     background: #060606;
 }
 
