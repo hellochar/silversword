@@ -39,7 +39,7 @@ function fromVector2(v2) {
 function updateProfile() {
     var pointsV2 = [points[0].toVector2(), points[1].toVector2(), points[2].toVector2()];
     var profile = new THREE.SplineCurve(pointsV2);
-    $('#canvas_profile')[0].profile = profile;
+    jQuery('#canvas_profile')[0].profile = profile;
 
     window.requestUpdateUI();
 }
@@ -48,7 +48,7 @@ function updateProfile() {
 
 /* =============    OFF CANVAS DRAGGING       =========== */
 function updateMousePosition(e) {
-    var position = $('#canvas_profile').offset();
+    var position = jQuery('#canvas_profile').offset();
     pmouseX = mouseX;
     pmouseY = mouseY;
     mouseX = e.pageX - position.left;
@@ -104,13 +104,13 @@ void mousePressed() {
         pressedPointY = pt.y;
     });
 
-    $('html').on('mousemove', offCanvasMoveListener).on('mouseup', offCanvasUpListener);
+    jQuery('html').bind('mousemove', offCanvasMoveListener).bind('mouseup', offCanvasUpListener);
 }
 
 void mouseReleased() {
     draggedOption = [];
 
-    $('html').off('mousemove', offCanvasMoveListener).off('mouseup', offCanvasUpListener);
+    jQuery('html').unbind('mousemove', offCanvasMoveListener).unbind('mouseup', offCanvasUpListener);
 }
 
 void mouseDragged() {
@@ -132,7 +132,7 @@ void draw() {
     }
 
     //draw profile
-    var profile = $('#canvas_profile')[0].profile;
+    var profile = jQuery('#canvas_profile')[0].profile;
 
     stroke(255);
     strokeWeight(2);
@@ -172,7 +172,7 @@ void setProfileModel(pointsArray) {
 }
 
 setTimeout(function() {
-    $(window).trigger("profile_control_loaded");
+    jQuery(window).trigger("profile_control_loaded");
 }, 0)
 
 void fixLastFunctionNotExportedBug() {}

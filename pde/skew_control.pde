@@ -2,7 +2,7 @@ float maxX, maxY;
 
 /* =============    OFF CANVAS DRAGGING       =========== */
 function updateMousePosition(e) {
-    var position = $('#canvas_skew').offset();
+    var position = jQuery('#canvas_skew').offset();
     pmouseX = mouseX;
     pmouseY = mouseY;
     mouseX = e.pageX - position.left;
@@ -32,11 +32,11 @@ function constrainMousePosition() {
 }
 
 void mousePressed() {
-    $('*:not(canvas)').on('mousemove', offCanvasMoveListener).on('mouseup', offCanvasUpListener);
+    jQuery('*:not(canvas)').bind('mousemove', offCanvasMoveListener).bind('mouseup', offCanvasUpListener);
 }
 
 void mouseReleased() {
-    $('*:not(canvas)').off('mousemove', offCanvasMoveListener).off('mouseup', offCanvasUpListener);
+    jQuery('*:not(canvas)').unbind('mousemove', offCanvasMoveListener).unbind('mouseup', offCanvasUpListener);
 }
 
 /* ======================================================== */
@@ -48,7 +48,7 @@ void setup() {
     size(234, 234);
     mouseX = width/2;
     mouseY = height/2;
-    if( ! $('#canvas_skew')[0].skew ) {
+    if( ! jQuery('#canvas_skew')[0].skew ) {
         setSkew(0, 0);
     }
 }
@@ -87,7 +87,7 @@ void draw() {
     noStroke();
     fill(255);
 
-    var skew = $('#canvas_skew')[0].skew;
+    var skew = jQuery('#canvas_skew')[0].skew;
     ellipse(skew.x, -skew.y, 16 / scalarX, 16 / scalarY);
 }
 
@@ -100,13 +100,13 @@ void setSkewToMouse() {
 }
 
 void setSkew(skewX, skewY) {
-    $('#canvas_skew')[0].skew = new THREE.Vector2(constrain(skewX, -maxX, maxX), constrain(skewY, -maxY, maxY));
+    jQuery('#canvas_skew')[0].skew = new THREE.Vector2(constrain(skewX, -maxX, maxX), constrain(skewY, -maxY, maxY));
 
     window.requestUpdateUI();
 }
 
 setTimeout(function() {
-    $(window).trigger("skew_control_loaded");
+    jQuery(window).trigger("skew_control_loaded");
 }, 0)
 
 void fixLastFunctionNotExportedBug() {}

@@ -1,4 +1,6 @@
-(function() {
+jQuery.noConflict();
+
+(function($) {
 
     var BASE_PRICE, PREASSEMBLED_COST; // in dollars
 
@@ -8,7 +10,7 @@
         shouldUpdateUI = true;
     }
 
-    window.paramStateToJSON = function() {
+    paramStateToJSON = function() {
         return {
             longitudes: $('#slider_lon').slider("value"),
             latitudes: $('#slider_lat').slider("value"),
@@ -21,13 +23,13 @@
     }
 
     THREE.SplineCurve.prototype.toJSON = function() { return this.points; }
-    window.paramStateToFlatJSON = function() {
-        var nested = window.paramStateToJSON();
+    paramStateToFlatJSON = function() {
+        var nested = paramStateToJSON();
 
         return JSON.parse(JSON.stringify(nested));
     }
 
-    window.paramStateFromFlatJSON = function(json) {
+    paramStateFromFlatJSON = function(json) {
         var sliders = {
             longitudes: $('#slider_lon'),
             latitudes: $('#slider_lat'),
@@ -59,13 +61,13 @@
         }
     }
 
-    window.stateToURL = function() {
-        var json = window.paramStateToFlatJSON();
+    stateToURL = function() {
+        var json = paramStateToFlatJSON();
         var location = window.location;
         return location.protocol + "//" + location.host + location.pathname + "?" + $.param(json);
     }
 
-    window.tryLoadStateFromURL = function() {
+    tryLoadStateFromURL = function() {
         var jsonStringValues = $.url().param();
         json = JSON.parse(JSON.stringify(jsonStringValues), function(key, value) {
             if( !isNaN(parseFloat(value)) ) {
@@ -73,7 +75,7 @@
             }
             return value;
         });
-        window.paramStateFromFlatJSON(json);
+        paramStateFromFlatJSON(json);
     }
 
     function resetUIElements(allSliderParameters) {
@@ -104,7 +106,7 @@
             $slider.slider(parameters);
         }
 
-        $('.slider').on( "slide", function(evt, ui) {
+        $('.slider').bind( "slide", function(evt, ui) {
             requestUpdateUI();
         });
 
@@ -420,12 +422,12 @@
 
         // poor man's promises
 
-        $(window).on("skew_control_loaded", function() {
+        $(window).bind("skew_control_loaded", function() {
             skew_loaded = true;
             tryInitialize();
         });
 
-        $(window).on("profile_control_loaded", function() {
+        $(window).bind("profile_control_loaded", function() {
             profile_loaded = true;
             tryInitialize();
         });
@@ -463,4 +465,4 @@
         }
     })();
 
-})();
+})(jQuery);
