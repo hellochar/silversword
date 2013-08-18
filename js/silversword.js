@@ -1,5 +1,3 @@
-jQuery.noConflict();
-
 (function($) {
 
     var BASE_PRICE, PREASSEMBLED_COST; // in dollars
@@ -125,7 +123,12 @@ jQuery.noConflict();
             });
             
             var text = txtLines.join("\r\n");
+
+            // Add a black background when sending to email
+            renderer.setClearColorHex(0x000000, 1);
+            renderer.render(scene, camera);
             var imageData = renderer.domElement.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "");
+            renderer.setClearColorHex(0x000000, 0);
             $.post("/submit_order.php",
                 {
                     data : text,
@@ -264,7 +267,6 @@ jQuery.noConflict();
             FAR = 10000;
 
         renderer = Detector.webgl ? new THREE.WebGLRenderer({preserveDrawingBuffer : true }) : new THREE.CanvasRenderer();
-        renderer.setClearColorHex(0x000000, 1);
         camera = new THREE.PerspectiveCamera(  VIEW_ANGLE,
                 ASPECT,
                 NEAR,
