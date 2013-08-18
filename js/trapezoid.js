@@ -46,6 +46,29 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
     }
     var diameter = sphere.diameter;
 
+    /* Looking at a trapezoid head on, the pointsBase array looks like:
+                           1                       2
+                               +----------------+
+                               +                +
+                         x    ++                ++
+                        axis  +                  +
+                             ++                  ++
+                             +                    +
+                 ^          ++                    ++
+                 |          +                      +
+                 |         ++                      ++
+                 |         +------------------------+
+                 |                  y axis
+                 |        0                          3
+      + longitude|        origin
+                 |
+                 |
+                 |
+                 |
+                 |
+                 +----------------->
+                    + latitude
+    */
     var pointsBase = this.pointsBase = [];
     pointsBase.push(fromSpherical(diameter/2, toLonAngle(lonIndex), toLatAngle(latIndex)));
     pointsBase.push(fromSpherical(diameter/2, toLonAngle(lonIndex+1), toLatAngle(latIndex)));
@@ -68,10 +91,7 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
     }.bind(this));
 
     //aperture
-    var apertureCenter = pointsTop[0].clone().
-                            add(this.xAxis.clone().multiplyScalar(.5)).
-                            add(this.yAxis.clone().multiplyScalar(.5));
-
+    var apertureCenter = _.reduce(pointsTop, function (memo, vec) { return memo.add(vec); }, new THREE.Vector3()).multiplyScalar(1/4);
     _.each(pointsTop, function (vector) {
         //lerp towards center by aperture amount
         lerp(vector, apertureCenter, sphere.aperture);
@@ -91,7 +111,6 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
 
     for(var i = 0; i < 4; i += 1) {
         var face = new THREE.Face4(i, i+4, (i+1)%4+4, (i+1)%4);
-        //TODO add normals
         face.normal = this.vertices[face.b].clone().sub(this.vertices[face.a]).cross(
                       this.vertices[face.d].clone().sub(this.vertices[face.a])).normalize();
         //face.vertexNormals.push(1,2,3,4);

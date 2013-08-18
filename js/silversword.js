@@ -61,7 +61,8 @@
 
     window.stateToURL = function() {
         var json = window.paramStateToFlatJSON();
-        return location.origin + location.pathname + "?" + $.param(json);
+        var location = window.location;
+        return location.protocol + "//" + location.host + location.pathname + "?" + $.param(json);
     }
 
     window.tryLoadStateFromURL = function() {
