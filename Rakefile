@@ -29,3 +29,10 @@ task :compile => :clean do
 
     puts "Wrote #{SS_JS}!"
 end
+
+task :export, [:version] do |t, args|
+    Dir.chdir('public_html') do
+        %x( git archive master -o ../silversword_#{args.version}.zip . )
+        puts "Created ../silversword_#{args.version}.zip!"
+    end
+end
