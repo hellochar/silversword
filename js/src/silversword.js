@@ -437,10 +437,7 @@
         $.get('parameters.txt', function(paramsAsString) {
             parameters = jsyaml.load(paramsAsString);
             window.SS_PARAMETERS = parameters;
-            $.get("pde/skew_control.pde", function (src) {
-                var canvas = $("#canvas_skew")[0];
-                new Processing(canvas, src);
-            });
+            Processing.loadSketchFromSources($("#canvas_skew")[0], ["pde/skew_control.pde"]);
             tryInitialize();
         });
 

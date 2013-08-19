@@ -145,6 +145,7 @@ a.red:hover {
 }
 
 #add_to_cart {
+    color: white;
     font-size: 16px;
     font-weight: bold;
 }
