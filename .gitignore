@@ -1,5 +1,5 @@
 /*.png
 *.grf
-ORDER_NUMBER.txt
+public_html/ORDER_NUMBER.txt
 compiler.jar
 *.zip
