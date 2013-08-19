@@ -1,5 +1,5 @@
 require 'rake'
-
+require 'listen'
 
 SS_JS = File.join("public_html", "js", "ss.js")
 
@@ -28,6 +28,16 @@ task :compile => :clean do
     end
 
     puts "Wrote #{SS_JS}!"
+end
+
+task :watch do
+  puts "Compiling and watching for changes in ./js"
+  system 'rake compile'
+
+  Listen.to "./js" do
+    puts 'File changed, recompiling...'
+    system 'rake compile'
+  end
 end
 
 task :export, [:version] do |t, args|
