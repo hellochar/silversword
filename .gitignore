@@ -2,4 +2,5 @@
 *.grf
 public_html/ORDER_NUMBER.txt
 compiler.jar
+php_errors.log
 *.zip
