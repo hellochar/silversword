@@ -27,7 +27,8 @@
         return JSON.parse(JSON.stringify(nested));
     }
 
-    paramStateFromFlatJSON = function(json) {
+    // Mutates state of sliders and processing sketches
+    tryLoadParamStateFromFlatJSON = function(json) {
         var sliders = {
             longitudes: $('#slider_lon'),
             latitudes: $('#slider_lat'),
@@ -44,13 +45,20 @@
                 Processing.getInstanceById("canvas_profile").setProfileModel(profile);
             }
         };
+
+        // _.keys(json) has three options:
+        //      has less than all of the keys in slider (fail)
+        //      has exactly all of the keys in slider (ok)
+        //      has more than all of the keys in slider (ok)
+        //
+        // how to detect if it has less than all the keys in slider
+        //      if the intersection of json and sliders has as many elements as sliders,
+        //      we're good
+        if(_.intersection( _.keys(json), _.keys(sliders) ).length < _.keys(sliders).length ) {
+            return;
+        }
+
         for(var key in sliders) {
-            if(! (key in json)) {
-                throw {
-                    name: "KeyError",
-                    message: key + " not specified!"
-                };
-            }
             if($.type(sliders[key]) == "function") {
                 sliders[key](json[key]);
             } else {
@@ -62,7 +70,17 @@
     stateToURL = function() {
         var json = paramStateToFlatJSON();
         var location = window.location;
-        return location.protocol + "//" + location.host + location.pathname + "?" + $.param(json);
+
+        //there may be params other than the SS ones. We want to keep those other ones intact, but
+        //overwrite the SS params if they're already set.
+        //
+        //1) get all params, turn into Object
+        //2) set the keys for specifically the json keys
+        //3) convert Object back into query string
+
+        allParams = $.url().param();
+        _.extend(allParams, json);
+        return location.protocol + "//" + location.host + location.pathname + "?" + $.param(allParams);
     }
 
     tryLoadStateFromURL = function() {
@@ -73,7 +91,7 @@
             }
             return value;
         });
-        paramStateFromFlatJSON(json);
+        tryLoadParamStateFromFlatJSON(json);
     }
 
     function resetUIElements(allSliderParameters) {
