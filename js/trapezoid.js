@@ -47,10 +47,10 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
     var diameter = sphere.diameter;
 
     /* Looking at a trapezoid head on, the pointsBase array looks like:
-                           1                       2
+                           3                       2
                                +----------------+
                                +                +
-                         x    ++                ++
+                         y    ++                ++
                         axis  +                  +
                              ++                  ++
                              +                    +
@@ -58,16 +58,16 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
                  |          +                      +
                  |         ++                      ++
                  |         +------------------------+
-                 |                  y axis
-                 |        0                          3
-      + longitude|        origin
-                 |
-                 |
+                 |                  x axis
+                 |        0                          1
+      + latitude |        origin
+      (constant  |
+      longitude) |
                  |
                  |
                  |
                  +----------------->
-                    + latitude
+                    + longitude (constant latitude)
     */
     var pointsBase = this.pointsBase = [];
     pointsBase.push(fromSpherical(diameter/2, toLonAngle(lonIndex), toLatAngle(latIndex)));
@@ -75,14 +75,23 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
     pointsBase.push(fromSpherical(diameter/2, toLonAngle(lonIndex+1), toLatAngle(latIndex+1)));
     pointsBase.push(fromSpherical(diameter/2, toLonAngle(lonIndex), toLatAngle(latIndex+1)));
 
-    var pointsTop = this.pointsTop = _.map(pointsBase, function (v3) { return v3.clone(); });
     this.origin = pointsBase[0].clone();
 
-    this.xAxis = new THREE.Vector3().subVectors(pointsBase[1], this.origin);
-    this.yAxis = new THREE.Vector3().subVectors(pointsBase[3], this.origin);
+    var xAxis = new THREE.Vector3().subVectors(pointsBase[1], this.origin);
+    var yAxis = new THREE.Vector3().subVectors(pointsBase[3], this.origin);
+    this.normal = new THREE.Vector3().crossVectors(xAxis, yAxis).negate().normalize();
 
-    this.normal = new THREE.Vector3().crossVectors(this.xAxis, this.yAxis).negate();
+    //make xAxis the length of the longer horizontal edge of the trapezoid
+    var longerLength = Math.max(pointsBase[0].distanceTo(pointsBase[1]),
+                                pointsBase[3].distanceTo(pointsBase[2]));
+    xAxis.setLength( longerLength );
 
+    //perpendicularize the yAxis
+    var yProjectedOnX = xAxis.clone().setLength( yAxis.dot( xAxis.clone().normalize() ) );
+    yAxis.sub( yProjectedOnX );
+
+
+    var pointsTop = this.pointsTop = _.map(pointsBase, function (v3) { return v3.clone(); });
 
     //extrude up
     var height = sphere.diameter * sphere.extrudeZ * sphere.profileScalar(latIndex + .5); // add 0.5 to average out the location where you're sampling
@@ -100,8 +109,8 @@ function TrapezoidGeometry(sphere, lonIndex, latIndex) {
     //skew
     _.each(pointsTop, function (vector) {
         vector.
-            add(this.xAxis.clone().multiplyScalar( - sphere.skew.x)).
-            add(this.yAxis.clone().multiplyScalar(sphere.skew.y));
+            add(xAxis.clone().multiplyScalar( - sphere.skew.x)).
+            add(yAxis.clone().multiplyScalar(sphere.skew.y));
     }.bind(this));
 
 
