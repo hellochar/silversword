@@ -80,7 +80,15 @@
                 return value;
             });
             Silversword.tryLoadParamStateFromFlatJSON(json);
-        }
+        },
+
+        getImageDataURL: function() {
+            Silversword.renderer.setClearColorHex(0x000000, 1);
+            Silversword.renderer.render(scene, camera);
+            var imageData = Silversword.renderer.domElement.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "");
+            Silversword.renderer.setClearColorHex(0x000000, 0);
+            return imageData;
+        },
 
     };
     window.Silversword = Silversword;
@@ -143,15 +151,11 @@
             var text = txtLines.join("\r\n");
 
             // Add a black background when sending to email
-            Silversword.renderer.setClearColorHex(0x000000, 1);
-            Silversword.renderer.render(scene, camera);
-            var imageData = Silversword.renderer.domElement.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "");
-            Silversword.renderer.setClearColorHex(0x000000, 0);
             $.post("/submit_order.php",
                 {
                     data : text,
                     ss_url : Silversword.stateToURL(),
-                    imageData : imageData
+                    imageData : Silversword.getImageDataURL(),
                 },
                 function (data, status, jqXHR) {
                     if(status != "success") {
