@@ -1,4 +1,5 @@
 (function($) {
+    $.ui.slider.prototype.widgetEventPrefix = 'jqueryui:';
 
     var Silversword = {
         shouldUpdateUI: false,
@@ -121,7 +122,7 @@
             $slider.slider(parameters);
         }
 
-        $('.slider').bind( "slide", function(evt, ui) {
+        $('.slider').bind( "jqueryui:slide", function(evt, ui) {
             Silversword.requestUpdateUI();
         });
 
