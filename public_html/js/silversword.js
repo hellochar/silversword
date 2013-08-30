@@ -1,97 +1,96 @@
 (function($) {
 
+    var Silversword = {
+        shouldUpdateUI: false,
+        requestUpdateUI: function() {
+            Silversword.shouldUpdateUI = true;
+        },
+        paramStateToJSON: function() {
+            return {
+                longitudes: $('#slider_lon').slider("value"),
+                latitudes: $('#slider_lat').slider("value"),
+                diameter: $('#slider_diameter').slider("value"),
+                extrudeZ: $('#slider_extrudeZ').slider("value"),
+                aperture: $('#slider_aperture').slider("value"),
+                skew: $('#canvas_skew')[0].skew,
+                profile: $('#canvas_profile')[0].profile
+            };
+        },
+        tryLoadParamStateFromFlatJSON: function(json) {
+            // Mutates state of sliders and processing sketches
+            var sliders = {
+                longitudes: $('#slider_lon'),
+                latitudes: $('#slider_lat'),
+                diameter: $('#slider_diameter'),
+                extrudeZ: $('#slider_extrudeZ'),
+                aperture: $('#slider_aperture'),
+                skew: function(skew) {
+                    Processing.getInstanceById("canvas_skew").setSkew(skew.x, skew.y);
+                },
+                profile: function(profile) {
+                    if( !Processing.getInstanceById("canvas_profile").setProfileModel ) {
+                        debugger
+                    }
+                    Processing.getInstanceById("canvas_profile").setProfileModel(profile);
+                }
+            };
+
+            // _.keys(json) has three options:
+            //      has less than all of the keys in slider (fail)
+            //      has exactly all of the keys in slider (ok)
+            //      has more than all of the keys in slider (ok)
+            //
+            // how to detect if it has less than all the keys in slider
+            //      if the intersection of json and sliders has as many elements as sliders,
+            //      we're good
+            if(_.intersection( _.keys(json), _.keys(sliders) ).length < _.keys(sliders).length ) {
+                return;
+            }
+
+            for(var key in sliders) {
+                if($.type(sliders[key]) == "function") {
+                    sliders[key](json[key]);
+                } else {
+                    sliders[key].slider("value", json[key]);
+                }
+            }
+        },
+        stateToURL: function() {
+            var json = Silversword.paramStateToFlatJSON();
+            var location = window.location;
+
+            //there may be params other than the SS ones. We want to keep those other ones intact, but
+            //overwrite the SS params if they're already set.
+            //
+            //1) get all params, turn into Object
+            //2) set the keys for specifically the json keys
+            //3) convert Object back into query string
+
+            allParams = $.url().param();
+            _.extend(allParams, json);
+            return location.protocol + "//" + location.host + location.pathname + "?" + $.param(allParams);
+        },
+        tryLoadStateFromURL: function() {
+            var jsonStringValues = $.url().param();
+            json = JSON.parse(JSON.stringify(jsonStringValues), function(key, value) {
+                if( !isNaN(parseFloat(value)) ) {
+                    return parseFloat(value);
+                }
+                return value;
+            });
+            Silversword.tryLoadParamStateFromFlatJSON(json);
+        }
+
+    };
+    window.Silversword = Silversword;
+
     var BASE_PRICE, PREASSEMBLED_COST; // in dollars
 
-    var shouldUpdateUI = false;
-
-    window.requestUpdateUI = function() {
-        shouldUpdateUI = true;
-    }
-
-    paramStateToJSON = function() {
-        return {
-            longitudes: $('#slider_lon').slider("value"),
-            latitudes: $('#slider_lat').slider("value"),
-            diameter: $('#slider_diameter').slider("value"),
-            extrudeZ: $('#slider_extrudeZ').slider("value"),
-            aperture: $('#slider_aperture').slider("value"),
-            skew: $('#canvas_skew')[0].skew,
-            profile: $('#canvas_profile')[0].profile
-        };
-    }
-
     THREE.SplineCurve.prototype.toJSON = function() { return this.points; }
-    paramStateToFlatJSON = function() {
-        var nested = paramStateToJSON();
+    Silversword.paramStateToFlatJSON = function() {
+        var nested = Silversword.paramStateToJSON();
 
         return JSON.parse(JSON.stringify(nested));
-    }
-
-    // Mutates state of sliders and processing sketches
-    tryLoadParamStateFromFlatJSON = function(json) {
-        var sliders = {
-            longitudes: $('#slider_lon'),
-            latitudes: $('#slider_lat'),
-            diameter: $('#slider_diameter'),
-            extrudeZ: $('#slider_extrudeZ'),
-            aperture: $('#slider_aperture'),
-            skew: function(skew) {
-                Processing.getInstanceById("canvas_skew").setSkew(skew.x, skew.y);
-            },
-            profile: function(profile) {
-                if( !Processing.getInstanceById("canvas_profile").setProfileModel ) {
-                    debugger
-                }
-                Processing.getInstanceById("canvas_profile").setProfileModel(profile);
-            }
-        };
-
-        // _.keys(json) has three options:
-        //      has less than all of the keys in slider (fail)
-        //      has exactly all of the keys in slider (ok)
-        //      has more than all of the keys in slider (ok)
-        //
-        // how to detect if it has less than all the keys in slider
-        //      if the intersection of json and sliders has as many elements as sliders,
-        //      we're good
-        if(_.intersection( _.keys(json), _.keys(sliders) ).length < _.keys(sliders).length ) {
-            return;
-        }
-
-        for(var key in sliders) {
-            if($.type(sliders[key]) == "function") {
-                sliders[key](json[key]);
-            } else {
-                sliders[key].slider("value", json[key]);
-            }
-        }
-    }
-
-    stateToURL = function() {
-        var json = paramStateToFlatJSON();
-        var location = window.location;
-
-        //there may be params other than the SS ones. We want to keep those other ones intact, but
-        //overwrite the SS params if they're already set.
-        //
-        //1) get all params, turn into Object
-        //2) set the keys for specifically the json keys
-        //3) convert Object back into query string
-
-        allParams = $.url().param();
-        _.extend(allParams, json);
-        return location.protocol + "//" + location.host + location.pathname + "?" + $.param(allParams);
-    }
-
-    tryLoadStateFromURL = function() {
-        var jsonStringValues = $.url().param();
-        json = JSON.parse(JSON.stringify(jsonStringValues), function(key, value) {
-            if( !isNaN(parseFloat(value)) ) {
-                return parseFloat(value);
-            }
-            return value;
-        });
-        tryLoadParamStateFromFlatJSON(json);
     }
 
     function resetUIElements(allSliderParameters) {
@@ -123,7 +122,7 @@
         }
 
         $('.slider').bind( "slide", function(evt, ui) {
-            requestUpdateUI();
+            Silversword.requestUpdateUI();
         });
 
         $('#add_to_cart').click(function(evt) {
@@ -132,8 +131,8 @@
              * # lon
              * coordinate points
              */
-            var txtLines = [sphere.NUM_LAT, sphere.NUM_LON];
-            sphere.unrollAll().forEach(function (unrolledTrapezoid) {
+            var txtLines = [Silversword.sphere.NUM_LAT, Silversword.sphere.NUM_LON];
+            Silversword.sphere.unrollAll().forEach(function (unrolledTrapezoid) {
                 unrolledTrapezoid.forEach(function (pt) {
                     txtLines.push(pt.x.toFixed(5));
                     txtLines.push(pt.y.toFixed(5));
@@ -143,14 +142,14 @@
             var text = txtLines.join("\r\n");
 
             // Add a black background when sending to email
-            renderer.setClearColorHex(0x000000, 1);
-            renderer.render(scene, camera);
-            var imageData = renderer.domElement.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "");
-            renderer.setClearColorHex(0x000000, 0);
+            Silversword.renderer.setClearColorHex(0x000000, 1);
+            Silversword.renderer.render(scene, camera);
+            var imageData = Silversword.renderer.domElement.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "");
+            Silversword.renderer.setClearColorHex(0x000000, 0);
             $.post("/submit_order.php",
                 {
                     data : text,
-                    ss_url : stateToURL(),
+                    ss_url : Silversword.stateToURL(),
                     imageData : imageData
                 },
                 function (data, status, jqXHR) {
@@ -172,7 +171,7 @@
         });
 
         $("#share").click(function(evt) {
-            var url = stateToURL();
+            var url = Silversword.stateToURL();
             $("#share_popup").dialog( "open" );
             $("#share_popup .share_link").attr("href", url).text(url).blur();
         });
@@ -196,7 +195,7 @@
             } else {
                 $("#checkmark").hide();
             }
-            requestUpdateUI();
+            Silversword.requestUpdateUI();
         }
 
         $("#pre-assembled")[0].checked = !!defaultChecked;
@@ -217,7 +216,7 @@
         recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile);
 
 
-        if(window.sphere) {
+        if(Silversword.sphere) {
             //taken from https://github.com/mrdoob/three.js/issues/581#issuecomment-14000527
             function getCompoundBoundingBox(object3D) {
                 var box = null;
@@ -234,7 +233,7 @@
                 return box;
             }
 
-            var totalBB = getCompoundBoundingBox(sphere);
+            var totalBB = getCompoundBoundingBox(Silversword.sphere);
             var totalHeight = totalBB.max.y - totalBB.min.y,
                 totalDiameter = totalBB.max.x - totalBB.min.x; //the z coordinate would work here too
             $('#dimensions_indicator').text( totalHeight.toFixed(2) +'" x ' + totalDiameter.toFixed(2) +'"');
@@ -245,12 +244,12 @@
         
         $('#cost_indicator').text('$' + cost.toFixed(2));
 
-        shouldUpdateUI = false;
+        Silversword.shouldUpdateUI = false;
     }
 
     function recomputeSphere(NUM_LON, NUM_LAT, diameter, extrudeZ, aperture, skew, profile) {
-        if(sphere != undefined) {
-            scene.remove(sphere);
+        if(Silversword.sphere != undefined) {
+            scene.remove(Silversword.sphere);
         }
         if(_.any(arguments, function(arg) { return arg === undefined; })) {
             // exit early if some of the arguments aren't ready yet (AKA skew/profile still downloading)
@@ -258,7 +257,7 @@
         }
 
         //DEFAULT SPHERE
-        sphere = new Sphere(
+        Silversword.sphere = new Sphere(
                 NUM_LON,
                 NUM_LAT,
                 diameter,
@@ -269,7 +268,7 @@
                 );
 
 
-        scene.add(sphere);
+        scene.add(Silversword.sphere);
     }
 
     function init() {
@@ -284,7 +283,7 @@
             NEAR = 0.1,
             FAR = 10000;
 
-        renderer = Detector.webgl ? new THREE.WebGLRenderer({preserveDrawingBuffer : true }) : new THREE.CanvasRenderer();
+        Silversword.renderer = Detector.webgl ? new THREE.WebGLRenderer({preserveDrawingBuffer : true }) : new THREE.CanvasRenderer();
         camera = new THREE.PerspectiveCamera(  VIEW_ANGLE,
                 ASPECT,
                 NEAR,
@@ -296,13 +295,13 @@
         camera.position.set( 10, 10, 20 );
 
         // start the renderer
-        renderer.setSize(WIDTH, HEIGHT);
+        Silversword.renderer.setSize(WIDTH, HEIGHT);
 
         // attach the render-supplied DOM element
-        $container.append(renderer.domElement);
+        $container.append(Silversword.renderer.domElement);
 
 
-        controls = new THREE.TrackballControls( camera, renderer.domElement );
+        controls = new THREE.TrackballControls( camera, Silversword.renderer.domElement );
         controls.rotateSpeed = 1.0;
         controls.zoomSpeed = 1.2;
         controls.panSpeed = 0.8;
@@ -351,7 +350,7 @@
         addLightsTo(scene);
         // addLightsTo(axisScene);
 
-        var axis = (function () {
+        Silversword.axis = (function () {
 
             function makeThickArrowMesh(params) {
                 var material = new THREE.MeshPhongMaterial(params);
@@ -391,12 +390,9 @@
             return axis;
         })();
 
-        window.axis = axis;
-        scene.add(axis);
-        // axisScene.add(axis);
+        scene.add(Silversword.axis);
 
-        window.sphere = undefined;
-        requestUpdateUI();
+        Silversword.requestUpdateUI();
 
     };
 
@@ -408,12 +404,12 @@
         camera.updateMatrix();
         camera.updateMatrixWorld(true);
 
-        if(shouldUpdateUI) {
+        if(Silversword.shouldUpdateUI) {
             updateUI();
         }
         updateAxisPosition();
 
-        renderer.render(scene, camera);
+        Silversword.renderer.render(scene, camera);
         stats.end();
     }
 
@@ -421,8 +417,8 @@
 
         var screenX = 55,
             screenY = 55;
-        var vector = new THREE.Vector3( THREE.Math.mapLinear(screenX, 0, renderer.domElement.width, -1, 1),
-                                        THREE.Math.mapLinear(screenY, 0, renderer.domElement.height, 1, -1),
+        var vector = new THREE.Vector3( THREE.Math.mapLinear(screenX, 0, Silversword.renderer.domElement.width, -1, 1),
+                                        THREE.Math.mapLinear(screenY, 0, Silversword.renderer.domElement.height, 1, -1),
                                         0.5 );
         var projector = new THREE.Projector();
         projector.unprojectVector( vector, camera );
@@ -430,8 +426,8 @@
         var dir = vector.sub( camera.position ).setLength( .5 );
 
 
-        axis.position.copy( camera.position );
-        axis.position.add( dir );
+        Silversword.axis.position.copy( camera.position );
+        Silversword.axis.position.add( dir );
 
     }
 
@@ -470,7 +466,7 @@
 
                 if(! _.isEmpty($.url().param()) ) {
                     try {
-                        tryLoadStateFromURL();
+                        Silversword.tryLoadStateFromURL();
                     } catch(err) {
                         //TODO modal dialog for bad configuration
                         throw err;

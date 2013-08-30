@@ -21,9 +21,12 @@ task :compile => :clean do
         end
 
         # minify the rest and concat it
-        to_compile = Dir.glob(File.join("js", "*.js"))
-        compiled = %x( java -jar compiler.jar #{to_compile.map{|fn| "--js #{fn} "}.join()} )
-        ssjs.puts compiled
+        # to_compile = Dir.glob(File.join("js", "*.js"))
+        # compiled = %x( java -jar compiler.jar #{to_compile.map{|fn| "--js #{fn} "}.join()} )
+        # ssjs.puts compiled
+        Dir[File.join("js", "*.js")].each do |file|
+            ssjs.puts(File.read(file))
+        end
 
     end
 

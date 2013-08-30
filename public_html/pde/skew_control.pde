@@ -102,7 +102,7 @@ void setSkewToMouse() {
 void setSkew(skewX, skewY) {
     jQuery('#canvas_skew')[0].skew = new THREE.Vector2(constrain(skewX, -maxX, maxX), constrain(skewY, -maxY, maxY));
 
-    window.requestUpdateUI();
+    window.Silversword.requestUpdateUI();
 }
 
 setTimeout(function() {

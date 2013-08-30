@@ -41,7 +41,7 @@ function updateProfile() {
     var profile = new THREE.SplineCurve(pointsV2);
     jQuery('#canvas_profile')[0].profile = profile;
 
-    window.requestUpdateUI();
+    window.Silversword.requestUpdateUI();
 }
 
 
