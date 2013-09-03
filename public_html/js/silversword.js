@@ -150,11 +150,8 @@
             
             var text = txtLines.join("\r\n");
 
-            // Add a black background when sending to email
-            $.post("/submit_order.php",
+            $.post("/save_image.php",
                 {
-                    data : text,
-                    ss_url : Silversword.stateToURL(),
                     imageData : Silversword.getImageDataURL(),
                 },
                 function (data, status, jqXHR) {
