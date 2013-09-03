@@ -7,11 +7,12 @@ $imageData = str_replace(' ','+', $imageData);
 
 $image = base64_decode($imageData);
 
-function msTimeStamp() {
-    return round(microtime(true) * 1000);
-}
+$k = explode(" ", microtime());
+$secondsPart = intval($k[1] * 1000);
+$microsecondsPart = intval(round($k[0]*1000));
 
-$timestamp = msTimeStamp();
+$timestamp = $secondsPart + $microsecondsPart;
+
 $imageName = "images" . DIRECTORY_SEPARATOR . "lampdesignimages" . DIRECTORY_SEPARATOR . "$timestamp.png";
 
 file_put_contents($imageName, $image);
