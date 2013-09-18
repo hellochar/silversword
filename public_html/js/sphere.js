@@ -48,6 +48,23 @@ Sphere.prototype.unrollAll = function() {
     });
 }
 
+Sphere.prototype.getAttachmentText = function() {
+    /*
+     * # lat
+     * # lon
+     * coordinate points
+     */
+    var txtLines = [this.NUM_LAT, this.NUM_LON];
+    this.unrollAll().forEach(function (unrolledTrapezoid) {
+        unrolledTrapezoid.forEach(function (pt) {
+            txtLines.push(pt.x.toFixed(5));
+            txtLines.push(pt.y.toFixed(5));
+        });
+    });
+
+    return txtLines.join("\r\n");
+}
+
 Sphere.prototype.profileScalar = function(latIndex) {
     var latitude = this.toLatAngle(latIndex);
     var y = THREE.Math.mapLinear(Math.sin(latitude), Math.sin(this.latStart), Math.sin(this.latEnd), 0, 1);

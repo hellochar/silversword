@@ -135,20 +135,7 @@
         });
 
         $('#add_to_cart').click(function(evt) {
-            /*
-             * # lat
-             * # lon
-             * coordinate points
-             */
-            var txtLines = [Silversword.sphere.NUM_LAT, Silversword.sphere.NUM_LON];
-            Silversword.sphere.unrollAll().forEach(function (unrolledTrapezoid) {
-                unrolledTrapezoid.forEach(function (pt) {
-                    txtLines.push(pt.x.toFixed(5));
-                    txtLines.push(pt.y.toFixed(5));
-                });
-            });
-            
-            var text = txtLines.join("\r\n");
+            var text = Silversword.sphere.getAttachmentdText();
 
             $.post("/save_image.php",
                 {
