@@ -48,7 +48,7 @@ Sphere.prototype.unrollAll = function() {
     });
 }
 
-Sphere.prototype.getAttachmentText = function() {
+Sphere.prototype.getAttachmentTextLines = function() {
     /*
      * # lat
      * # lon
@@ -62,7 +62,7 @@ Sphere.prototype.getAttachmentText = function() {
         });
     });
 
-    return txtLines.join("\r\n");
+    return txtLines;
 }
 
 Sphere.prototype.profileScalar = function(latIndex) {

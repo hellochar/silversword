@@ -134,23 +134,6 @@
             Silversword.requestUpdateUI();
         });
 
-        $('#add_to_cart').click(function(evt) {
-            var text = Silversword.sphere.getAttachmentdText();
-
-            $.post("/save_image.php",
-                {
-                    imageData : Silversword.getImageDataURL(),
-                },
-                function (data, status, jqXHR) {
-                    if(status != "success") {
-                        alert("something went wrong: " + data);
-                    }
-                    else {
-                        alert(data);
-                    }
-                });
-        });
-
         $("#share_popup").dialog({
             autoOpen: false,
             modal: true,
